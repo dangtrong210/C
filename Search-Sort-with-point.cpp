@@ -107,8 +107,6 @@ int main(){
 //	interchangesort(arr, n);
 //	bubbleSort(arr,n);
 	print(arr, n);
-	
-	
-	free(arr);
+
 	return 0;
 }
