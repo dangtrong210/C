@@ -91,6 +91,10 @@ int main(){
 		printf("a[%d]: ", i);
 		scanf("%d", arr + i);
 	}
+	//	selectionsort(arr,n);
+	//	insectionsort(arr, n);
+	//	interchangesort(arr, n);
+		bubbleSort(arr,n);
 	
 	printf("Nhap vao gia tri can tim: ");
 	scanf ("%d",&x);
@@ -101,12 +105,12 @@ int main(){
 		printf("Trong mang khong co so can tim\n");
 	}
 	
-	
-//	selectionsort(arr,n);
-//	insectionsort(arr, n);
-//	interchangesort(arr, n);
-//	bubbleSort(arr,n);
 	print(arr, n);
+<<<<<<< HEAD
 
+=======
+	
+	free(arr);
+>>>>>>> 901b6a21ac433739aa9fc60cfb1dd09198e8f649
 	return 0;
 }
