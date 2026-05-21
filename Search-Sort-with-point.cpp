@@ -106,11 +106,8 @@ int main(){
 	}
 	
 	print(arr, n);
-<<<<<<< HEAD
 
-=======
-	
 	free(arr);
->>>>>>> 901b6a21ac433739aa9fc60cfb1dd09198e8f649
+
 	return 0;
 }
