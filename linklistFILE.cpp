@@ -32,6 +32,29 @@ void append(list *l, int value){
 		l->tail=newnode;
 	}
 }
+void del(list *l, int value){
+	node *p=l->head;
+	node *q;
+	if (l==NULL) return;
+	while(value != p->data){
+		q=p;
+		p=p->next;
+	}
+	if(p==NULL){
+		printf("Khong co so can xoa");
+	}else{
+		if(p==l->head){
+			l->head=q;
+			free(p);
+		}else{
+			q->next=p->next;
+			if (p==l->tail){
+				q=l->tail;
+			}
+			free(p);
+		}
+	}
+}
 
 void noilist(list *l1, list *l2){
 	if(l2->head==NULL){
@@ -76,7 +99,17 @@ void quicksort(list *l){
 	noilist(l,&l2);
 }
 
-void del(list *l, int value){
+void xuly(list *l, FILE *ptr){
+	ptr=fopen("arr1.txt","w");
+	node *p=l->head;
+	while(p!=NULL){
+		fprintf(ptr,"%d	",p->data);
+		p=p->next;
+	}
+	fclose(ptr);
+}
+
+void del(list *l, int value, FILE *ptr){
 	node *p=l->head;
 	node *q;
 	if (l==NULL) return;
@@ -98,10 +131,10 @@ void del(list *l, int value){
 			free(p);
 		}
 	}
+	xuly(l,ptr);
 }
 
 void print(list *l){
-	quicksort(l);
 	node *p=l->head;
 	while(p!=NULL){
 		printf("%d	",p->data);
@@ -116,20 +149,27 @@ int main(){
 	printf("Nhap so phan tu trong danh sach: ");
 	scanf("%d",&n);
 	
+	FILE *ptr;
+	ptr=fopen("arr.txt","w");
 	for (int i=0; i<n; i++){
 		printf("Nhap phan tu thu %d: ",i+1);
 		scanf("%d",&value);
-		append(&l, value);
+		fprintf(ptr,"%d ",value);
 	}
+	fclose(ptr);
 	
-	printf("Nhap so luong value can xoa: ");
-	scanf("%d",&m);
-	
-	for (int i=0; i<m; i++){
-		printf("So thu %d can xoa: ",i+1);
-		scanf("%d", &x);
-		del(&l,x);	
+	ptr=fopen("arr.txt","r");
+	for (int i=0; i<n; i++){
+		fscanf(ptr,"%d",&value);
+		append(&l,value);
 	}
+	fclose(ptr);
+	
+	quicksort(&l);
+	
+	printf("Nhap vao gia tri can xoa: ");
+	scanf("%d",&x);
+	del(&l,x,ptr);
 	
 	print(&l);
 }
