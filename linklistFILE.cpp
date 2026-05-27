@@ -1,8 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef struct sinhvien{
+	char mssv[20];
+	char hoten[50];
+	int gpa;
+}sinhvien;
+
 typedef struct node {
-	int data;
+	sinhvien *data;
 	struct node *next;
 }node;
 
@@ -15,14 +21,14 @@ void init(list *l){
 	l->head=l->tail=NULL;
 }
 
-node *create(int value){
+node *create(sinhvien *value){
 	node *newnode=((node*)malloc(sizeof(node)));
 	newnode->data=value;
 	newnode->next=NULL;
 	return newnode;
 }
 
-void append(list *l, int value){
+void append(list *l, sinhvien *value){
 	node *newnode=create(value);
 	if (l->head==NULL){
 		l->head=newnode;
@@ -30,29 +36,6 @@ void append(list *l, int value){
 	}else{
 		l->tail->next=newnode;
 		l->tail=newnode;
-	}
-}
-void del(list *l, int value){
-	node *p=l->head;
-	node *q;
-	if (l==NULL) return;
-	while(value != p->data){
-		q=p;
-		p=p->next;
-	}
-	if(p==NULL){
-		printf("Khong co so can xoa");
-	}else{
-		if(p==l->head){
-			l->head=q;
-			free(p);
-		}else{
-			q->next=p->next;
-			if (p==l->tail){
-				q=l->tail;
-			}
-			free(p);
-		}
 	}
 }
 
@@ -82,7 +65,7 @@ void quicksort(list *l){
 	while (p != NULL){
 		node *nodenext=p->next;
 		p->next=NULL;
-		if(p->data < pivot->data){
+		if(p->data->gpa > pivot->data->gpa){
 			append(&l1,p->data);
 		}else{
 			append(&l2,p->data);
@@ -103,31 +86,33 @@ void xuly(list *l, FILE *ptr){
 	ptr=fopen("arr1.txt","w");
 	node *p=l->head;
 	while(p!=NULL){
-		fprintf(ptr,"%d	",p->data);
+		fprintf(ptr,"%s %s %d\n",p->data->mssv,p->data->hoten,p->data->gpa);
 		p=p->next;
 	}
 	fclose(ptr);
 }
 
-void del(list *l, int value, FILE *ptr){
+void del(list *l, const char *value, FILE *ptr){
 	node *p=l->head;
 	node *q;
 	if (l==NULL) return;
-	while(value != p->data){
+	while(atoi(value) != atoi(p->data->mssv)){
 		q=p;
 		p=p->next;
 	}
 	if(p==NULL){
-		printf("Khong co so can xoa");
+		printf("Khong co sinh vien can xoa");
 	}else{
 		if(p==l->head){
 			l->head=q;
+			free(p->data);
 			free(p);
 		}else{
 			q->next=p->next;
 			if (p==l->tail){
 				q=l->tail;
 			}
+			free(p->data);
 			free(p);
 		}
 	}
@@ -137,38 +122,49 @@ void del(list *l, int value, FILE *ptr){
 void print(list *l){
 	node *p=l->head;
 	while(p!=NULL){
-		printf("%d	",p->data);
+		printf("%s	%s	%d\n",p->data->mssv,p->data->hoten,p->data->gpa);
 		p=p->next;
 	}
 }
 
 int main(){
-	int n,m,x, value;
+	int n,m;
+	char x[20];
 	list l;
 	init(&l);
-	printf("Nhap so phan tu trong danh sach: ");
+	printf("Nhap so sinh vien: ");
 	scanf("%d",&n);
 	
 	FILE *ptr;
 	ptr=fopen("arr.txt","w");
+	sinhvien *value=((sinhvien*)malloc(sizeof(sinhvien)));
 	for (int i=0; i<n; i++){
-		printf("Nhap phan tu thu %d: ",i+1);
-		scanf("%d",&value);
-		fprintf(ptr,"%d ",value);
+		fflush(stdin);
+		printf("Nhap mssv thu %d: ",i+1);
+		gets(value->mssv);
+		fflush(stdin);
+		printf("Nhap ho va ten: ");
+		gets(value->hoten);
+		printf("Nhap diem: ");
+		scanf("%d",&value->gpa);
+		
+		fprintf(ptr,"%s %s %d\n",value->mssv,value->hoten,value->gpa);
 	}
 	fclose(ptr);
 	
 	ptr=fopen("arr.txt","r");
 	for (int i=0; i<n; i++){
-		fscanf(ptr,"%d",&value);
+		sinhvien *value=((sinhvien*)malloc(sizeof(sinhvien)));
+		fscanf(ptr,"%s %s %d",&value->mssv,&value->hoten,&value->gpa);
 		append(&l,value);
 	}
 	fclose(ptr);
 	
 	quicksort(&l);
 	
-	printf("Nhap vao gia tri can xoa: ");
-	scanf("%d",&x);
+	fflush(stdin);
+	printf("Nhap mssv can xoa: ");
+	gets(x);
 	del(&l,x,ptr);
 	
 	print(&l);
