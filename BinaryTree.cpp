@@ -87,8 +87,7 @@ node *findnode(node *root){
 	if(root->left==NULL){
 		return root;
 	}
-	findnode(root->left);
-	findnode(root->right);
+	return findnode(root->left);
 }
 
 
@@ -104,12 +103,12 @@ node *del(node *root, int x){
 		}else{
 			if(root->left==NULL){
 				node *temp=root->right;
-				free (root->left);
+				free (root);
 				return temp;
 			}else{
 				if(root->right==NULL){
 					node *temp=root->left;
-					free (root->right);
+					free (root);
 					return temp;
 				}
 			}
