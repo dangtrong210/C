@@ -3,71 +3,98 @@
 #include <string.h>
 #include <ctype.h>
 
-// C?u trúc Stack
-struct Stack {
-    int top;
-    int capacity;
-    char *array;
-};
-
-struct Stack* createStack(int capacity) {
-    struct Stack* stack = (struct Stack*)malloc(sizeof(struct Stack));
-    stack->capacity = capacity;
-    stack->top = -1;
-    stack->array = (char*)malloc(stack->capacity * sizeof(char));
-    return stack;
+typedef struct node{
+	char data;
+	struct node *link;
+}node;
+ 
+typedef struct stack{
+	node *top;
+}stack;
+ 
+void init(stack *s){
+	s->top=NULL;
 }
 
-int isEmpty(struct Stack* stack) { return stack->top == -1; }
-char peek(struct Stack* stack) { return stack->array[stack->top]; }
-void push(struct Stack* stack, char op) { stack->array[++stack->top] = op; }
-char pop(struct Stack* stack) { 
-    if (!isEmpty(stack)) return stack->array[stack->top--]; 
-    return '$'; 
+int empty(stack *s){
+	return s->top==NULL?1:0;
 }
 
-// Xác d?nh d? uu tiên
-int precedence(char ch) {
-    if (ch == '+' || ch == '-') return 1;
-    if (ch == '*' || ch == '/') return 2;
+void push(stack *s,char value){
+	node *newnode=((node*)malloc(sizeof(node)));
+	if (newnode==NULL||value==NULL){
+		exit(0);
+	}
+	newnode->data = value;
+	newnode->link=s->top;
+	s->top=newnode;	
+}
+
+char pop(stack *s){
+	if (empty(s)){
+		return '\0';
+	}
+	node *temp = s->top;
+	char value=temp->data;
+	s->top=s->top->link;
+	free(temp);
+	return value;
+}
+
+void print(stack *s){
+	node *p=s->top;
+	while(p!=NULL){
+		printf("%c",p->data);
+		p=p->link;
+	}
+}
+
+int getPrecedence(char op) {
+    if (op == '*' || op == '/') return 2;
+    if (op == '+' || op == '-') return 1;
     return 0;
 }
 
-void infixToPostfix(char* exp) {
-    struct Stack* stack = createStack(strlen(exp));
+void infixToPostfix(char* infix) {
+    int n = strlen(infix);
+    char* stack = (char*)malloc(n * sizeof(char));
+    int top = -1;
 
-    for (int i = 0; exp[i]; ++i) {
-        if (isalnum(exp[i])) {
-            printf("%c", exp[i]);
-        } 
-        else if (exp[i] == '(') {
-            push(stack, exp[i]);
-        } 
-        else if (exp[i] == ')') {
-            while (!isEmpty(stack) && peek(stack) != '(')
-                printf("%c", pop(stack));
-            pop(stack); // Xóa '('
-        } 
-        else { // Toán t?
-            while (!isEmpty(stack) && precedence(peek(stack)) >= precedence(exp[i])) {
-                printf("%c", pop(stack));
+    for (int i = 0; i < n; i++) {
+        char c = infix[i];
+        if (isalnum(c)) {	//Neu la toan hang in ra truc tiep
+            printf("%c", c);
+        }
+        else if (c == '(') {
+            stack[++top] = c;
+        }
+        else if (c == ')') {
+            while (top != -1 && stack[top] != '(') {
+                printf("%c", stack[top--]);
             }
-            push(stack, exp[i]);
+            top--;
+        }
+        else {
+            while (top != -1 && getPrecedence(stack[top]) >= getPrecedence(c)) {
+                printf("%c", stack[top--]);
+            }
+            stack[++top] = c;
         }
     }
-    while (!isEmpty(stack)) printf("%c", pop(stack));
+    while (top != -1) {
+        printf("%c", stack[top--]);
+    }
     printf("\n");
+    free(stack);
 }
-
-int main() {
-    char exp1[] = "A+B*C";
-    char exp2[] = "(A+B)*C";
-    
-    printf("Infix: %s -> Postfix: ", exp1);
-    infixToPostfix(exp1);
-    
-    printf("Infix: %s -> Postfix: ", exp2);
-    infixToPostfix(exp2);
-    
-    return 0;
+int main(){
+	stack s;
+	init (&s);
+	fflush(stdin);
+	char *c=(char*)malloc(sizeof(char));
+	printf("Nhap vao chuoi ky tu: ");
+	gets(c);
+	printf("Infix: %s -> Postfix: ",c);
+    infixToPostfix(c);
+	return 0;
 }

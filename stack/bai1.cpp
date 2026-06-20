@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>
 #include <string.h>
+#include <stdbool.h>
 
 typedef struct node{
 	char data;
@@ -49,26 +49,34 @@ void print(stack *s){
 	}
 }
 
-int kiemtra(stack *s, char *t,int n){
-	for (int i=0; i<n;i++){
-		char c = *(t + i);
-		if (c=='('||c=='{'||c=='['){
-			push(s,c);
-		}else{
-			if(c==')'||c=='}'||c==']'){
-				if (empty(s)){
-					return 0;
-				}
-				char open=pop(s);
-				if (!((open=='(' && c==')') || (open=='{' && c=='}') || (open=='[' && c==']'))){
-					return 0;
-				}
-			}
-		}
-	}
-	return empty(s);
+bool isMatchingPair(char open, char close) {
+    if (open == '(' && close == ')') return true;
+    if (open == '{' && close == '}') return true;
+    if (open == '[' && close == ']') return true;
+    return false;
 }
 
+bool isValid(char* s) {
+    int n = strlen(s);
+    char* stack = (char*)malloc(n * sizeof(char));
+    int top = -1;
+
+    for (int i = 0; i < n; i++) {
+        if (s[i] == '(' || s[i] == '{' || s[i] == '[') {
+            stack[++top] = s[i];
+        }
+        else {
+            if (top == -1 || !isMatchingPair(stack[top], s[i])) {
+                free(stack);
+                return false;
+            }
+            top--;
+        }
+    }
+    bool result = (top == -1);
+    free(stack);
+    return result;
+}
 int main(){
 	stack s;
 	init (&s);
@@ -76,10 +84,6 @@ int main(){
 	char *c=(char*)malloc(sizeof(char));
 	printf("Nhap vao chuoi ky tu: ");
 	gets(c);
-	if (kiemtra(&s,c,strlen(c))==0){
-		printf("Chuoi %s ko hop le",c);
-	}else{
-		printf("Chuoi %s hop le",c);
-	}
+	printf("Chuoi %s: %s\n", c, isValid(c) ? "Hop le" : "Khong hop le");
 	return 0;
 }
