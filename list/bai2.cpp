@@ -32,18 +32,17 @@ void append(list *l, int value){
 	}
 }
 
-void reverse_list(list *l) {
-    node* prev = NULL;
-    node* current = l->head;
-    node* next = NULL;
+node* find_middle(list *l) {
+    if (l->head == NULL) return NULL;
 
-    while (current != NULL) {
-        next = current->next;
-        current->next = prev;
-        prev = current;  
-        current = next;
-    }
-    l->head = prev; 
+    node* slow = l->head;
+    node* fast = l->head;
+
+    while (fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }    
+    return slow;
 }
 
 void print(list *l) {
@@ -67,7 +66,7 @@ int main() {
 		append(&l,data);
 	}
 	print(&l);
-	reverse_list(&l);
-    print(&l);
+	node *mid = find_middle(&l);
+	printf("Gia tri nut o giua la: %d",mid->data);
 	return 0;
 }
