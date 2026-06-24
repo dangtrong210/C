@@ -1,483 +1,296 @@
-Bài số 1: Tìm kiếm, sắp xếp
+# Cấu trúc Dữ liệu và Giải thuật — Tài liệu Thực hành (C/C++)
+
+---
+
+## Bài số 1: Tìm kiếm, Sắp xếp
+
+```c
 #include<stdio.h>
 #include<conio.h>
 #include<stdlib.h>
-int a[100],b[100], c[100],n;
 
-void hoanvi(int &x, int &y)
-{
-	int t=x;
-	    x=y;
-	    y=t;
-}
-void nhap(int a[],int n)
-{       
-	for(int i=1;i<=n;i++)
-    {
-		printf("a[%d]=",i);
-		scanf("%d",&a[i]);
-	}
+int a[100], b[100], c[100], n;
+
+void hoanvi(int &x, int &y) {
+    int t = x; x = y; y = t;
 }
 
-void xuat(int a[],int n)
-{
-	for(int i=1;i<=n;i++)
-	printf("%4d",a[i]);
+void nhap(int a[], int n) {
+    for (int i = 1; i <= n; i++) {
+        printf("a[%d]=", i);
+        scanf("%d", &a[i]);
+    }
 }
 
-int LinearSearch(int a[], int n, int x)
-{	int i;
-	for (i=1; (a[i]!=x); i++);
-	if (i<=n)	
-		return i; 	// a[i] la phan tu co khoa x
-	return -1; 	// khong tim thay phan tu co khoa x
+void xuat(int a[], int n) {
+    for (int i = 1; i <= n; i++)
+        printf("%4d", a[i]);
 }
 
-int BinarySearch(int a[],int n,int x)
-{ 
-	int  left =1, right = n, midle;
-	while (left <= right)	
-	{	
-		midle = (left + right)/2;
-		if (x == a[midle])
-		   return midle;//Tim thay tai vi tri mid
-		if (x<a[midle])right = midle -1;
-		else           left  = midle +1;
-	}
-	return -1; // khong tim thay phan tu co khoa x
+int LinearSearch(int a[], int n, int x) {
+    int i;
+    for (i = 1; (a[i] != x); i++);
+    if (i <= n) return i;
+    return -1;
 }
 
-
-void selectionsort(int a[],int n)
- {
-int min;
-for(int i=1;i<n;i++)
-	{
-	min=i;
-	for(int j=i+1;j<=n;j++)
-	if(a[j]<a[min])
-	min=j;
-	hoanvi(a[min],a[i]);
-	}
-}
-void insertionsort(int a[],int n)
-{
-	int pos;
-	int x;
-	for(int i=1;i<=n;i++)
-	{
-		x=a[i];pos=i-1;
-	while((pos>=0)&&(a[pos]>x))
-	{
-			a[pos+1]=a[pos];
-			pos--;
-	}
-		a[pos+1]=x;
-	}
-}
-void interchangeSort(int a[],int n)
-{
-int i,j;
-	for(i=1;i<n-1;i++)
-		for(j=i+1;j<n;j++)
-			if(a[j]<a[i])
-			hoanvi(a[i],a[j]);
-}
-void BubleSort(int a[],int n)
-{
-	int i,j;
-	for(i=1;i<n;i++)
-		for(j=n;j>i;j--)
-		if(a[j]<a[j-1])
-		hoanvi(a[j],a[j-1]);
-}
-void ShakeSort(int a[],int n)
-{
-	int i,j;
-	int left,right,k;
-	left=0;right=n-1;k=n-1;
-	while(left<right)
-	{
-	for(j=right;j>left;j--)
-	{
-		if(a[j]<a[j-1])
-		{
-		hoanvi(a[j],a[j-1]);
-		k=j;
-		}
-	}
-	left=k;
-	for(j=left;j<right;j++)
-	{
-		if(a[j]>a[j+1])
-		{
-		hoanvi(a[j],a[j-1]);
-		k=j;
-		}
-	}
-	right=k;
-      }
+int BinarySearch(int a[], int n, int x) {
+    int left = 1, right = n, midle;
+    while (left <= right) {
+        midle = (left + right) / 2;
+        if (x == a[midle]) return midle;
+        if (x < a[midle]) right = midle - 1;
+        else left = midle + 1;
+    }
+    return -1;
 }
 
-void Shift (int a[], int left, int right)
-{  
-	int  x, curr, joint;
-   curr = left; joint =2*curr; 
-   x = a[curr];
-   while (joint <= right) 
-	{  	
-		if (joint < right)        
-         if (a[joint] < a[joint+1])
-			joint = joint+1;
-      if (a[joint]<x) break; 
-		else
-		{
-		a[curr] = a[joint];
-      	curr = joint;   
-       joint = 2*curr;
-		}
-	 	a[curr] = x;  
-	}
+void selectionsort(int a[], int n) {
+    int min;
+    for (int i = 1; i < n; i++) {
+        min = i;
+        for (int j = i + 1; j <= n; j++)
+            if (a[j] < a[min]) min = j;
+        hoanvi(a[min], a[i]);
+    }
 }
 
-void CreateHeap(int a[], int N)
-{	
-   int  left;
-	 for (left = (N)/2; left >= 1; left --)
-		Shift(a, left, N);
+void insertionsort(int a[], int n) {
+    int pos, x;
+    for (int i = 1; i <= n; i++) {
+        x = a[i]; pos = i - 1;
+        while ((pos >= 0) && (a[pos] > x)) {
+            a[pos + 1] = a[pos];
+            pos--;
+        }
+        a[pos + 1] = x;
+    }
 }
 
-void	Heapsort (int a[], int N)
-{
-   int   right;
-   CreateHeap(a, N); 
-   right = N; 
-   while (right > 1)
-   {
-      hoanvi(a[1],a[right]);
-      right --;
-      Shift(a,1,right);
-   }
+void interchangeSort(int a[], int n) {
+    int i, j;
+    for (i = 1; i < n - 1; i++)
+        for (j = i + 1; j < n; j++)
+            if (a[j] < a[i]) hoanvi(a[i], a[j]);
 }
 
-void Sellsort(int a[],int n)
-{
-	int h[]={5,3,1};
-	int k=3;
-	int step,i,j;
-	int x,len;
-	for(step = 0;step<k;step++)
-	{
-	len=h[step];
-	for(i=len;i<=n;i++)
-	{
-	x=a[i];
-	j=i-len;
-	while((x<a[j])&&(j>=1))
-	{
-		a[j+len]=a[j];
-		j=j-len;
-	}
-	a[j+len]=x;
-	}
-	}
-}
-void Quicksort(int a[],int l,int r)
-{
-	int i,j;
-	int x;
-	x=a[(l+r)/2];
-	i=l;j=r;
-	do
-	{
-		while(a[i]<x) i++;
-		while(a[j]>x) j--;
-		if(i<=j)
-		{
-			hoanvi(a[i],a[j]);
-			i++;j--;
-		}
-	}while(i<j);
-	if(l<j)
-	Quicksort(a,l,j);
-	if(i<r)
-	Quicksort(a,i,r);
-
+void BubleSort(int a[], int n) {
+    int i, j;
+    for (i = 1; i < n; i++)
+        for (j = n; j > i; j--)
+            if (a[j] < a[j - 1]) hoanvi(a[j], a[j - 1]);
 }
 
-int min(int a,int b)
-{
-return a<b?a:b;
-}
-void Merge(int a[], int nb, int nc, int k)
-{	int p, pb, pc, ib, ic, kb, kc;
-p = pb = pc = 0; ib = ic = 0;
-while((0 < nb)&&(0 < nc))
-{
-kb = min(k, nb); kc = min(k, nc);
-if(b[pb+ib] <= c[pc+ic])
-{
-a[p++] = b[pb+ib]; ib++;
-if(ib == kb)
-{
-for(; ic<kc; ic++)
-a[p++] = c[pc+ic];
-pb += kb; pc += kc; ib = ic = 0;
-nb -= kb; nc -= kc;
-}
-}
-else
-{
-a[p++] = c[pc+ic]; ic++;
-if(ic == kc)
-{
-for(; ib<kb; ib++)
-a[p++] = b[pb+ib];
-pb += kb; pc += kc; ib = ic = 0;
-nb -= kb; nc -= kc;
-}
-}
-}
+void ShakeSort(int a[], int n) {
+    int i, j, left, right, k;
+    left = 0; right = n - 1; k = n - 1;
+    while (left < right) {
+        for (j = right; j > left; j--)
+            if (a[j] < a[j - 1]) { hoanvi(a[j], a[j - 1]); k = j; }
+        left = k;
+        for (j = left; j < right; j++)
+            if (a[j] > a[j + 1]) { hoanvi(a[j], a[j - 1]); k = j; }
+        right = k;
+    }
 }
 
-void mergesort(int a[], int n)
-{
-	int	p, pb, pc;	//  chi so tren cac mang a, b, c
-	int	i, k = 1;	// Do dai cua day con khi phan hoach
-	do
-	{
-	// tach a thanh b ,c
-	p = pb = pc = 0;
-	while(p < n)
-	{
-	for(i = 0; (p <=n)&&(i < k); i++)
-		b[pb++] = a[p++];
-	for(i = 0; (p <=n)&&(i < k); i++)
-		c[pc++] = a[p++];
-	}
-	Merge(a, pb, pc, k); //tron b, c lai thanh a
-k *= 2;
-	}
-	while(k <= n);
+void Shift(int a[], int left, int right) {
+    int x, curr, joint;
+    curr = left; joint = 2 * curr;
+    x = a[curr];
+    while (joint <= right) {
+        if (joint < right)
+            if (a[joint] < a[joint + 1]) joint = joint + 1;
+        if (a[joint] < x) break;
+        else {
+            a[curr] = a[joint];
+            curr = joint;
+            joint = 2 * curr;
+        }
+        a[curr] = x;
+    }
 }
-int main()
-{	int x, vitri;
-	printf("\n nhap so phan tu:");
-	scanf("%d",&n);
-	nhap(a,n);
-	printf("\n day so da nhap la:");
-	xuat(a,n);
-	//Kiem tra ham tim tuan tu
-	printf("\n nhap khoa can tim:");
-	scanf("%d",&x);
-	vitri=LinearSearch(a, n, x);
-	if(vitri==-1)
-		printf("Khong tim thay %d",x);
-	else
-		printf("%d xuat hien tai vi tri %d",x,vitri);
-	/*
-	//Kiem tra ham tim nhi phan
-	printf("\n nhap khoa can tim:");
-	scanf("%d",&x);
-	vitri=BinarySearch(a, n,x);
-	if(vitri==-1)
-		printf("Khong tim thay %d",x);
-	else
-		printf("%d xuat hien tai vi tri %d",x,vitri);
-	*/
-	//Kiem tra ham selectionsort 	
-	//selectionsort(a,n);
-	//Kiem tra ham insertionsort
-	//insertionsort(a,n);
-	//Kiem tra ham interchangesort
-	//interchangesort(a,n);
-	//Kiem tra ham BubleSort
-	//BubleSort(a,n);
-	//Kiem tra ham ShakeSort
-	//ShakeSort(a,n);
-	//Kiem tra ham Heapsort
-	//Heapsort(a,n);
-	//Kiem tra ham Sellsort
-	//Sellsort(a,n);
-	//Kiem tra ham mergesort
-   // mergesort(a,n);
-   //Kiem tra ham Quicksort
-	//Quicksort(a,1,n);
-	//printf("\n day so sap xep la:");
-	//xuat(a,n);
-	//return 0;
-	getch();
+
+void CreateHeap(int a[], int N) {
+    int left;
+    for (left = (N) / 2; left >= 1; left--)
+        Shift(a, left, N);
 }
- 
-Bài số 2: Sắp xếp ngoài
-Phương pháp trộn Run
+
+void Heapsort(int a[], int N) {
+    int right;
+    CreateHeap(a, N);
+    right = N;
+    while (right > 1) {
+        hoanvi(a[1], a[right]);
+        right--;
+        Shift(a, 1, right);
+    }
+}
+
+void Sellsort(int a[], int n) {
+    int h[] = {5, 3, 1};
+    int k = 3, step, i, j, x, len;
+    for (step = 0; step < k; step++) {
+        len = h[step];
+        for (i = len; i <= n; i++) {
+            x = a[i]; j = i - len;
+            while ((x < a[j]) && (j >= 1)) { a[j + len] = a[j]; j = j - len; }
+            a[j + len] = x;
+        }
+    }
+}
+
+void Quicksort(int a[], int l, int r) {
+    int i, j, x;
+    x = a[(l + r) / 2];
+    i = l; j = r;
+    do {
+        while (a[i] < x) i++;
+        while (a[j] > x) j--;
+        if (i <= j) { hoanvi(a[i], a[j]); i++; j--; }
+    } while (i < j);
+    if (l < j) Quicksort(a, l, j);
+    if (i < r) Quicksort(a, i, r);
+}
+
+int min(int a, int b) { return a < b ? a : b; }
+
+void Merge(int a[], int nb, int nc, int k) {
+    int p, pb, pc, ib, ic, kb, kc;
+    p = pb = pc = 0; ib = ic = 0;
+    while ((0 < nb) && (0 < nc)) {
+        kb = min(k, nb); kc = min(k, nc);
+        if (b[pb + ib] <= c[pc + ic]) {
+            a[p++] = b[pb + ib]; ib++;
+            if (ib == kb) {
+                for (; ic < kc; ic++) a[p++] = c[pc + ic];
+                pb += kb; pc += kc; ib = ic = 0;
+                nb -= kb; nc -= kc;
+            }
+        } else {
+            a[p++] = c[pc + ic]; ic++;
+            if (ic == kc) {
+                for (; ib < kb; ib++) a[p++] = b[pb + ib];
+                pb += kb; pc += kc; ib = ic = 0;
+                nb -= kb; nc -= kc;
+            }
+        }
+    }
+}
+
+void mergesort(int a[], int n) {
+    int p, pb, pc, i, k = 1;
+    do {
+        p = pb = pc = 0;
+        while (p < n) {
+            for (i = 0; (p <= n) && (i < k); i++) b[pb++] = a[p++];
+            for (i = 0; (p <= n) && (i < k); i++) c[pc++] = a[p++];
+        }
+        Merge(a, pb, pc, k);
+        k *= 2;
+    } while (k <= n);
+}
+
+int main() {
+    int x, vitri;
+    printf("\n nhap so phan tu:"); scanf("%d", &n);
+    nhap(a, n);
+    printf("\n day so da nhap la:"); xuat(a, n);
+    printf("\n nhap khoa can tim:"); scanf("%d", &x);
+    vitri = LinearSearch(a, n, x);
+    if (vitri == -1) printf("Khong tim thay %d", x);
+    else printf("%d xuat hien tai vi tri %d", x, vitri);
+    getch();
+}
+```
+
+---
+
+## Bài số 2: Sắp xếp ngoài
+
+### Phương pháp trộn Run
+
+```c
 #include "stdio.h"
 #include "conio.h"
-int p,n;
-void tao_file(void)
-{
-//Tao file co n phan tu
-int i,x;
-FILE *fp;
-fp=fopen("D:\\Bang.txt","wb");
-printf("Cho biet so phan tu : ");
-scanf("%d", &n);
-for(i=0;i<n;i++)
-{
-printf("Nhap so thu %d : ",i+1);
-scanf("%d", &x);
-fprintf(fp,"%3d",x);
-}
-fclose(fp);
-}
-void xuat_file(void)
-{
-//Hien thi noi dung file len man hinh
-int x;
-FILE *fp;
-fp=fopen("D:\\Bang.txt","rb");
-int i=0;
-while(i<n)
-{
-fscanf(fp,"%d",&x);
-printf("%3d",x);
-i++;
-}
-fclose(fp);
-}
-void chia(FILE *a, FILE *b, FILE *c, int p)
-{
-//Chia xoay vong file a cho file b va file c moi lan p phan tu cho 
-//den khi het file a.
-int dem, x;
-a=fopen("D:\\Bang.txt","rb");
-b=fopen("D:\\Bang1.txt","wb");
-c=fopen("D:\\Bang2.txt","wb");
-while(!feof(a))
-{
-//Chia p phan tu cho b
-dem=0;
-while((dem<p) && (!feof(a)))
-{
-fscanf(a,"%3d",&x);
-fprintf(b,"%3d",x);
-dem++;
-}
-//Chia p phan tu cho c
-dem=0;
-while((dem<p) && (!feof(a)))
-{
-fscanf(a,"%3d",&x);
-fprintf(c,"%3d",x);
-dem++;
-}
-}
-fclose(a);
-fclose(b);
-fclose(c);
-}
-void tron(FILE *b, FILE *c, FILE *a, int p)
-{
-//Tron p phan tu tren b voi p phan tu tren c thanh 2*p phan tu tren a cho den khi
-//file b hoac c het
-int stop, x, y, l, r;
-a=fopen("D:\\Bang.txt","wb");
-b=fopen("D:\\Bang1.txt","rb");
-c=fopen("D:\\Bang2.txt","rb");
-while((!feof(b)) && (!feof(c)))
-{
-l=0; //so phan tu cua b da ghi het len a
-r=0; //so phan tu cua c da ghi het len a
-fscanf(b,"%3d",&x);
-fscanf(c,"%3d",&y);
-stop=0;
-while((l!=p) && (r!=p) && (!stop))
-{
-if(x<y)
-{
-fprintf(a,"%3d",x);
-l++;
-if((l<p) && (!feof(b)))
-fscanf(b,"%3d",&x); //chua du p phan tu va chua het file b
-else
-{
-fprintf(a,"%3d",y);
-r++;
-if((feof(b)))
-stop=1;
-}
-}
-else
-{
-fprintf(a,"%3d",y);
-r++;
-if((r<p) && (!feof(c)))
-fscanf(c,"%3d",&y); //chua du p phan tu va chua het file c
-else
-{
-fprintf(a,"%3d",x);
-l++;
-if((feof(c)))
-stop=1;
-}
-}
-}
-//chep phan tu con lai cua p phan tu tren b len a
-while((!feof(b)) && (l<p))
-{
-fscanf(b,"%3d",&x);
-fprintf(a,"%3d",x);
-l++;
-}
-//chep phan tu con lai cua p phan tu tren c len a
-while((!feof(c)) && (r<p))
-{
-fscanf(c,"%3d",&y);
-fprintf(a,"%3d",y);
-r++;
-}
-}
-if(!feof(b))
-{
-//chep phan tu con lai cua b len a
-while(!feof(b))
-{
-fscanf(b,"%3d",&x);
-fprintf(a,"%3d",x);
-}
-}
-if(!feof(c))
-{
-//chep phan tu con lai cua c len a
-while(!feof(c))
-{
-fscanf(c,"%3d",&x);
-fprintf(a,"%3d",x);
-}
-}
-fclose(a);
-fclose(b);
-fclose(c);
-}
-int main(void)
-{
-FILE *a, *b, *c;
-tao_file();
-printf("\n Tap tin nhap:");
-xuat_file();
-p=1;
-while(p<n)
-{
-chia(a,b,c,p);
-tron(b,c,a,p);
-p=2*p;
-}
-printf("\n Tap tin da sap xep:");
-xuat_file();
-getch();
+
+int p, n;
+
+void tao_file(void) {
+    int i, x; FILE *fp;
+    fp = fopen("D:\\Bang.txt", "wb");
+    printf("Cho biet so phan tu : "); scanf("%d", &n);
+    for (i = 0; i < n; i++) {
+        printf("Nhap so thu %d : ", i + 1); scanf("%d", &x);
+        fprintf(fp, "%3d", x);
+    }
+    fclose(fp);
 }
 
-Phương pháp trộn tự nhiên
+void xuat_file(void) {
+    int x; FILE *fp;
+    fp = fopen("D:\\Bang.txt", "rb");
+    int i = 0;
+    while (i < n) { fscanf(fp, "%d", &x); printf("%3d", x); i++; }
+    fclose(fp);
+}
+
+void chia(FILE *a, FILE *b, FILE *c, int p) {
+    int dem, x;
+    a = fopen("D:\\Bang.txt", "rb");
+    b = fopen("D:\\Bang1.txt", "wb");
+    c = fopen("D:\\Bang2.txt", "wb");
+    while (!feof(a)) {
+        dem = 0;
+        while ((dem < p) && (!feof(a))) { fscanf(a, "%3d", &x); fprintf(b, "%3d", x); dem++; }
+        dem = 0;
+        while ((dem < p) && (!feof(a))) { fscanf(a, "%3d", &x); fprintf(c, "%3d", x); dem++; }
+    }
+    fclose(a); fclose(b); fclose(c);
+}
+
+void tron(FILE *b, FILE *c, FILE *a, int p) {
+    int stop, x, y, l, r;
+    a = fopen("D:\\Bang.txt", "wb");
+    b = fopen("D:\\Bang1.txt", "rb");
+    c = fopen("D:\\Bang2.txt", "rb");
+    while ((!feof(b)) && (!feof(c))) {
+        l = 0; r = 0;
+        fscanf(b, "%3d", &x); fscanf(c, "%3d", &y); stop = 0;
+        while ((l != p) && (r != p) && (!stop)) {
+            if (x < y) {
+                fprintf(a, "%3d", x); l++;
+                if ((l < p) && (!feof(b))) fscanf(b, "%3d", &x);
+                else { fprintf(a, "%3d", y); r++; if (feof(b)) stop = 1; }
+            } else {
+                fprintf(a, "%3d", y); r++;
+                if ((r < p) && (!feof(c))) fscanf(c, "%3d", &y);
+                else { fprintf(a, "%3d", x); l++; if (feof(c)) stop = 1; }
+            }
+        }
+        while ((!feof(b)) && (l < p)) { fscanf(b, "%3d", &x); fprintf(a, "%3d", x); l++; }
+        while ((!feof(c)) && (r < p)) { fscanf(c, "%3d", &y); fprintf(a, "%3d", y); r++; }
+    }
+    if (!feof(b)) while (!feof(b)) { fscanf(b, "%3d", &x); fprintf(a, "%3d", x); }
+    if (!feof(c)) while (!feof(c)) { fscanf(c, "%3d", &x); fprintf(a, "%3d", x); }
+    fclose(a); fclose(b); fclose(c);
+}
+
+int main(void) {
+    FILE *a, *b, *c;
+    tao_file();
+    printf("\n Tap tin nhap:"); xuat_file();
+    p = 1;
+    while (p < n) { chia(a, b, c, p); tron(b, c, a, p); p = 2 * p; }
+    printf("\n Tap tin da sap xep:"); xuat_file();
+    getch();
+}
+```
+
+### Phương pháp trộn tự nhiên
+
+```c
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
@@ -486,1559 +299,585 @@ Phương pháp trộn tự nhiên
 #include <ctype.h>
 
 typedef int DataType;
-FILE *F0,*F1,*F2;
-int M,N,Eor;
-/*
-Bien eor dung de kiem tra ket thuc Run hoac File
-*/
-DataType X1,X2,X,Y;
+FILE *F0, *F1, *F2;
+int M, N, Eor;
+DataType X1, X2, X, Y;
 
-void CreatFile(FILE *Ft,int Num)
-/*Tao file co ngau nhien n phan tu* */
-{
-srand(time(NULL));
-Ft=fopen("e:\\bang.txt","wb");
-for( int i = 0 ; i < Num ; i++)
-{
-X = rand()%(30);
-fprintf(Ft,"%3d",X);
-}
-fclose(Ft);
-}
-void ListFile(FILE *Ft)
-/*Hien thi noi dung cua file len man hinh */
-{
-DataType X,I=0;
-Ft = fopen("e:\\bang.txt","rb");
-while ( !feof(Ft) )
-{
-fscanf(Ft,"%3d",&X);
-printf("%3d",X);
-I++;
-}
-printf("\n\n");
-fclose(Ft);
-}
-/**/
-void Copy(FILE *Fi,FILE *Fj)
-{
-//Doc phan tu X tu Tap tin Fi, ghi X vao Fj
-//Eor==1, Neu het Run(tren Fi) hoac het File Fi
-fscanf(Fi,"%3d",&X);
-fprintf(Fj,"%3d",X);
-if( !feof(Fi) )
-{
-fscanf(Fi,"%3d",&Y);
-long curpos = ftell(Fi)-2;
-fseek(Fi, curpos, SEEK_SET);
-}
-if ( feof(Fi) ) Eor = 1;
-else Eor = (X > Y) ? 1 : 0 ;
+void CreatFile(FILE *Ft, int Num) {
+    srand(time(NULL));
+    Ft = fopen("e:\\bang.txt", "wb");
+    for (int i = 0; i < Num; i++) { X = rand() % (30); fprintf(Ft, "%3d", X); }
+    fclose(Ft);
 }
 
-void CopyRun(FILE *Fi,FILE *Fj)
-/*Chep 1 Run tu Fi vao Fj */
-{
-do
-Copy(Fi,Fj);
-while ( !Eor);
+void ListFile(FILE *Ft) {
+    DataType X, I = 0;
+    Ft = fopen("e:\\bang.txt", "rb");
+    while (!feof(Ft)) { fscanf(Ft, "%3d", &X); printf("%3d", X); I++; }
+    printf("\n\n"); fclose(Ft);
 }
-void Distribute()
-/*Phan bo luan phien cac Run tu nhien tu F0 vao F1 va F2*/
-{
-do
-{
-CopyRun(F0,F1);
-if( !feof(F0) ) CopyRun(F0,F2);
-}while( !feof(F0) );
-fclose(F0);
-fclose(F1);
-fclose(F2);
-}
-void MergeRun()
-/*Tron 1 Run cua F1 va F2 vao F0*/
-{
-do
-{
-fscanf(F1,"%3d",&X1);
-long curpos = ftell(F1)-2;
-fseek(F1, curpos, SEEK_SET);
-fscanf(F2,"%3d",&X2);
-curpos = ftell(F2)-2;
-fseek(F2, curpos, SEEK_SET);
-if( X1 <= X2 )
-{
-Copy(F1,F0);
-if (Eor) CopyRun(F2,F0);
-}
-else
-{
-Copy(F2,F0);
-if ( Eor ) CopyRun(F1,F0);
-}
-} while ( !Eor );
-}
-void Merge()
-/*Tron cac run tu F1 va F2 vao F0*/
-{
-while( (!feof(F1)) && (!feof(F2)) )
-{
-MergeRun();
-M++;
-}
-while( !feof(F1) )
-{
-CopyRun(F1,F0);
-M++;
-}
-while( !feof(F2) )
-{
-CopyRun(F2,F0);
-M++;
-}
-fclose(F0);
-fclose(F1);
-fclose(F2);
-}
-//Ham main
-int main()
-{
-printf(" Nhap so phan tu: ");
-scanf("%d",&N);
-CreatFile(F0,N);
-printf("\n Noi dung file goc:");
-ListFile(F0);
-do
-{
-F0=fopen("e:\\bang.txt","rb");
-F1=fopen("e:\\bang1.txt","wb");
-F2=fopen("e:\\bang2.txt","wb");
-Distribute();
-F0=fopen("e:\\bang.txt","wb");
-F1=fopen("e:\\bang1.txt","rb");
-F2=fopen("e:\\bang2.txt","rb");
-M=0;
-Merge();
-}while (M != 1);
 
-printf("\n Noi dung file da sap xep:");
-ListFile(F0);
-getch();
-return 0;
+void Copy(FILE *Fi, FILE *Fj) {
+    fscanf(Fi, "%3d", &X); fprintf(Fj, "%3d", X);
+    if (!feof(Fi)) {
+        fscanf(Fi, "%3d", &Y);
+        long curpos = ftell(Fi) - 2;
+        fseek(Fi, curpos, SEEK_SET);
+    }
+    if (feof(Fi)) Eor = 1;
+    else Eor = (X > Y) ? 1 : 0;
 }
- 
-Bài số 3: Danh sách liên kết
+
+void CopyRun(FILE *Fi, FILE *Fj) { do Copy(Fi, Fj); while (!Eor); }
+
+void Distribute() {
+    do {
+        CopyRun(F0, F1);
+        if (!feof(F0)) CopyRun(F0, F2);
+    } while (!feof(F0));
+    fclose(F0); fclose(F1); fclose(F2);
+}
+
+void MergeRun() {
+    do {
+        fscanf(F1, "%3d", &X1); long curpos = ftell(F1) - 2; fseek(F1, curpos, SEEK_SET);
+        fscanf(F2, "%3d", &X2); curpos = ftell(F2) - 2; fseek(F2, curpos, SEEK_SET);
+        if (X1 <= X2) { Copy(F1, F0); if (Eor) CopyRun(F2, F0); }
+        else { Copy(F2, F0); if (Eor) CopyRun(F1, F0); }
+    } while (!Eor);
+}
+
+void Merge() {
+    while ((!feof(F1)) && (!feof(F2))) { MergeRun(); M++; }
+    while (!feof(F1)) { CopyRun(F1, F0); M++; }
+    while (!feof(F2)) { CopyRun(F2, F0); M++; }
+    fclose(F0); fclose(F1); fclose(F2);
+}
+
+int main() {
+    printf(" Nhap so phan tu: "); scanf("%d", &N);
+    CreatFile(F0, N);
+    printf("\n Noi dung file goc:"); ListFile(F0);
+    do {
+        F0 = fopen("e:\\bang.txt", "rb"); F1 = fopen("e:\\bang1.txt", "wb"); F2 = fopen("e:\\bang2.txt", "wb");
+        Distribute();
+        F0 = fopen("e:\\bang.txt", "wb"); F1 = fopen("e:\\bang1.txt", "rb"); F2 = fopen("e:\\bang2.txt", "rb");
+        M = 0; Merge();
+    } while (M != 1);
+    printf("\n Noi dung file da sap xep:"); ListFile(F0);
+    getch(); return 0;
+}
+```
+
+---
+
+## Bài số 3: Danh sách liên kết
+
+```cpp
 #include<stdio.h>
 #include<conio.h>
 #include<string.h>
-#include<stdlib.h>;
-typedef struct sinhvien
-{
-	char maso[10];
-	char hoten[50];
-	int tuoi;
-}sinhvien;
-typedef struct node
-{
-	sinhvien data;
-	node *pnext;
+#include<stdlib.h>
 
-}node;
-typedef struct list
-{
-	node *phead;
-	node *ptail;
-}list;
-void khoitao(list &l)
-{
-	l.phead=l.ptail=NULL;
-}
-node *taonut()
-{
-	node *p;sinhvien sv;
-	p=new(node);
-	if(p!=NULL)
-	{
-		printf("\nNhap ma so:");
-		fflush(stdin);gets(sv.maso);
-		printf("\nNhap ho ten:");
-		fflush(stdin);gets(sv.hoten);
-		printf("\nNhap tuoi:");
-		scanf("%d",&sv.tuoi);
-		p->data=sv;
-		p->pnext=NULL;
-		return p;
-	}
-	return NULL;
-}
-void addtail(list &l,node *new_ele)
-{
-	if(l.phead==NULL)
-	{
-		l.phead=new_ele;
-		l.ptail=l.phead ;
-	}
-	else
-	{
-		l.ptail->pnext=new_ele;
-		l.ptail=new_ele;
-	}
-}
-void addfirst(list &l,node *new_ele)
-{
-	if(l.phead==NULL)
-	{
-		l.phead=new_ele;
-		l.ptail=l.phead ;
-	}
-	else
-	{
-		new_ele->pnext=l.phead;
-		l.phead=new_ele;
-	}
-}
-node *timvitri(list l)
-{
-	char ma[10];node *q;
-	printf("\nNhap ma so can tim :");
-	fflush(stdin);gets(ma);
-	q=l.phead;
-	while(q!=NULL)
-	{
-		if(strcmp(ma,q->data.maso)==0)
-			return q;
-		else
-			q=q->pnext;
-	}
-	return NULL;
+typedef struct sinhvien { char maso[10]; char hoten[50]; int tuoi; } sinhvien;
+typedef struct node { sinhvien data; node *pnext; } node;
+typedef struct list { node *phead; node *ptail; } list;
+
+void khoitao(list &l) { l.phead = l.ptail = NULL; }
+
+node *taonut() {
+    node *p; sinhvien sv;
+    p = new(node);
+    if (p != NULL) {
+        printf("\nNhap ma so:"); fflush(stdin); gets(sv.maso);
+        printf("\nNhap ho ten:"); fflush(stdin); gets(sv.hoten);
+        printf("\nNhap tuoi:"); scanf("%d", &sv.tuoi);
+        p->data = sv; p->pnext = NULL; return p;
+    }
+    return NULL;
 }
 
-void addafter(list &l,node *q,node *new_ele)
-{
-	if(q!=NULL)
-	{
-		new_ele->pnext=q->pnext;
-		q->pnext=new_ele;
-		if(q==l.ptail)
-			l.ptail=new_ele;
-
-	}
-	else
-		addfirst(l,new_ele);
-}
-void taods(list &l)
-{
-	int n;node *p;
-	printf("\nnhap so phan tu:");
-	scanf("%d",&n);
-	for(int i=1;i<=n;i++)
-	{
-		p=taonut();
-		addfirst(l,p);
-
-	}
-}
-void duyetds(list l)
-{
-	node *p;p=l.phead;
-	printf("\nMa so  || Ho ten ||Tuoi    ");
-	while(p!=NULL)
-	{
-		printf("\n %s %s %d",p->data.maso,p->data.hoten,p->data.tuoi);
-		p=p->pnext;
-	}
-}
-sinhvien removehead(list &l)
-{
-	node *p;
-	sinhvien x;
-	if(l.phead!=NULL)
-	{
-		p=l.phead;x=p->data;
-		l.phead=l.phead->pnext;
-		delete p;
-		if(l.phead==NULL)
-			l.ptail=NULL;
-
-	}
-	return x;
-
-}
-void removeafter(list &l,node *q)
-{
-	node *p;
-	if(q!=NULL)
-	{
-		p=q->pnext;
-		if(p!=NULL)
-		{
-			if(p==l.ptail)
-				l.ptail=q;
-			q->pnext=p->pnext;
-			delete p;
-		}
-	}
-	else
-		removehead(l);
-}
-void remove(list &l, char ma[])
-{
-	node *p,*q;
-	p=l.phead;
-	while((p!=NULL)&&(strcmp(p->data.maso,ma)!=0))
-	{
-		q=p;
-		p=p->pnext;
-	 }
-	if(p==NULL)
-		printf("\n Sinh vien khong co trong danh sach ");
-	else
-		if(p==l.phead)
-		{
-			l.phead=p->pnext;
-			delete(p);
-		}
-		else
-		{
-			q->pnext=p->pnext;
-			delete(p);
-		}
-}
-void Interchange(list &l)
-{
-
-	for(node *p=l.phead;p!=l.ptail;p=p->pnext)
-
-		for(node *q=p->pnext;q!=NULL;q=q->pnext)
-			if(p->data.tuoi>q->data.tuoi)
-			{
-
-				sinhvien a;
-				a=p->data;
-				p->data=q->data;
-				q->data=a;
-			}
+void addtail(list &l, node *new_ele) {
+    if (l.phead == NULL) { l.phead = new_ele; l.ptail = l.phead; }
+    else { l.ptail->pnext = new_ele; l.ptail = new_ele; }
 }
 
-void noids(list &l,list &l2)
-{
-	if(l2.phead==NULL)
-		return;
-	if(l.phead==NULL)
-	  {
-	    l.phead=l2.phead;
-	    l.ptail=l2.ptail;
-	  }
-	else
-	{
-		l.ptail->pnext=l2.phead;
-		l.ptail=l2.ptail;
-	}
+void addfirst(list &l, node *new_ele) {
+    if (l.phead == NULL) { l.phead = new_ele; l.ptail = l.phead; }
+    else { new_ele->pnext = l.phead; l.phead = new_ele; }
+}
+
+node *timvitri(list l) {
+    char ma[10]; node *q;
+    printf("\nNhap ma so can tim :"); fflush(stdin); gets(ma);
+    q = l.phead;
+    while (q != NULL) {
+        if (strcmp(ma, q->data.maso) == 0) return q;
+        else q = q->pnext;
+    }
+    return NULL;
+}
+
+void addafter(list &l, node *q, node *new_ele) {
+    if (q != NULL) {
+        new_ele->pnext = q->pnext; q->pnext = new_ele;
+        if (q == l.ptail) l.ptail = new_ele;
+    } else addfirst(l, new_ele);
+}
+
+void taods(list &l) {
+    int n; node *p;
+    printf("\nnhap so phan tu:"); scanf("%d", &n);
+    for (int i = 1; i <= n; i++) { p = taonut(); addfirst(l, p); }
+}
+
+void duyetds(list l) {
+    node *p = l.phead;
+    printf("\nMa so  || Ho ten ||Tuoi");
+    while (p != NULL) { printf("\n %s %s %d", p->data.maso, p->data.hoten, p->data.tuoi); p = p->pnext; }
+}
+
+sinhvien removehead(list &l) {
+    node *p; sinhvien x;
+    if (l.phead != NULL) {
+        p = l.phead; x = p->data; l.phead = l.phead->pnext; delete p;
+        if (l.phead == NULL) l.ptail = NULL;
+    }
+    return x;
+}
+
+void removeafter(list &l, node *q) {
+    node *p;
+    if (q != NULL) {
+        p = q->pnext;
+        if (p != NULL) { if (p == l.ptail) l.ptail = q; q->pnext = p->pnext; delete p; }
+    } else removehead(l);
+}
+
+void remove(list &l, char ma[]) {
+    node *p, *q; p = l.phead;
+    while ((p != NULL) && (strcmp(p->data.maso, ma) != 0)) { q = p; p = p->pnext; }
+    if (p == NULL) printf("\n Sinh vien khong co trong danh sach");
+    else if (p == l.phead) { l.phead = p->pnext; delete(p); }
+    else { q->pnext = p->pnext; delete(p); }
+}
+
+void Interchange(list &l) {
+    for (node *p = l.phead; p != l.ptail; p = p->pnext)
+        for (node *q = p->pnext; q != NULL; q = q->pnext)
+            if (p->data.tuoi > q->data.tuoi) { sinhvien a; a = p->data; p->data = q->data; q->data = a; }
+}
+
+void noids(list &l, list &l2) {
+    if (l2.phead == NULL) return;
+    if (l.phead == NULL) { l.phead = l2.phead; l.ptail = l2.ptail; }
+    else { l.ptail->pnext = l2.phead; l.ptail = l2.ptail; }
     khoitao(l2);
 }
 
-void quicksort(list &l)
-{
-	node *x,*p;
-	list l1,l2;
-	if(l.phead==l.ptail)
-		return;
-	khoitao(l1);
-	khoitao(l2);
-
-	x=l.phead;
-	l.phead=x->pnext;
-	x->pnext=NULL;
-
-	while(l.phead!=NULL)
-	{
-	  p=l.phead;
-	  l.phead=p->pnext;
-	  if(atoi(p->data.maso)<atoi(x->data.maso))
-		   addtail(l1,p);
-	  else
-		   addtail(l2,p);
-	}
-	quicksort(l1);
-	quicksort(l2);
-	noids(l,l1);
-	addtail(l,x);
-	noids(l,l2);
+void quicksort(list &l) {
+    node *x, *p; list l1, l2;
+    if (l.phead == l.ptail) return;
+    khoitao(l1); khoitao(l2);
+    x = l.phead; l.phead = x->pnext; x->pnext = NULL;
+    while (l.phead != NULL) {
+        p = l.phead; l.phead = p->pnext;
+        if (atoi(p->data.maso) < atoi(x->data.maso)) addtail(l1, p);
+        else addtail(l2, p);
+    }
+    quicksort(l1); quicksort(l2);
+    noids(l, l1); addtail(l, x); noids(l, l2);
 }
-int main()
-{
-	list l;node *q,*new_ele; char ma[10];
-	khoitao(l);
-	taods(l);
-	printf("\n Danh nhap la:");
-	duyetds(l);
-	/*printf("\ndanh sach sau khi xoa la:");
-	fflush(stdin);
-	gets(ma);
-	remove(l,ma);
-	printf("\n Danh sau khi xoa la:");
-	duyetds(l);
-	/*q=timvitri(l);
-	printf("\nnhap sinh vien moi:");
-	new_ele=taonut();
-	addafter(l,q,new_ele);
-	printf("\ndanh sach sau khi chen sinh vien moi:");
-	q=timvitri(l);
-	printf("\ndanh sach sau khi xoa la:");
-	removeafter(l,q);
-	printf("\n Danh sach sau khi sap xep :\n");
-	Interchange(l);
-quicksort(l);
-	duyetds(l);*/
-	getch();
+
+int main() {
+    list l; node *q, *new_ele; char ma[10];
+    khoitao(l); taods(l);
+    printf("\n Danh nhap la:"); duyetds(l);
+    getch();
 }
- 
-Bài 4: Cấu trúc ngăn xếp (Stack)
-Stack cài đặt bằng mảng
+```
+
+---
+
+## Bài 4: Cấu trúc ngăn xếp (Stack)
+
+### Stack cài đặt bằng mảng
+
+```cpp
 #include<stdio.h>
 #include<conio.h>
 #include<string.h>
 #include<stdlib.h>
 #define N 20
-typedef struct node
-{       long maso;
-	char hoten[40];
-	char diachi[100];
-}node;
-typedef struct stack
-{
-	int top;
-	node list[N];
-}stack;
-void khoitao(stack &s)
-{
-	s.top=-1;
+
+typedef struct node { long maso; char hoten[40]; char diachi[100]; } node;
+typedef struct stack { int top; node list[N]; } stack;
+
+void khoitao(stack &s) { s.top = -1; }
+int empty(stack s) { return s.top == -1 ? 1 : 0; }
+int full(stack s) { return s.top == N - 1 ? 1 : 0; }
+void push(stack &s, node x) { if (!full(s)) s.list[++s.top] = x; }
+node pop(stack &s) { node x; if (!empty(s)) x = s.list[s.top--]; return x; }
+
+int main() {
+    int n; stack s; node x;
+    printf("\n nhap vao so phan tu:"); scanf("%d", &n);
+    khoitao(s);
+    for (int i = 0; i < n; i++) {
+        printf("\n nhap ma so:"); scanf("%d", &x.maso);
+        printf("\n nhap ho ten:"); fflush(stdin); gets(x.hoten);
+        printf("\n nhap dia chi :"); fflush(stdin); gets(x.diachi);
+        push(s, x);
+    }
+    while (!empty(s)) {
+        x = pop(s);
+        printf("\nMa so:%d Ho ten:%s Dia chi:%s", x.maso, x.hoten, x.diachi);
+    }
 }
-int empty(stack s)
-{
-	return s.top==-1?1:0;
-}
-int full(stack s)
-{
-	return s.top==N-1?1:0;
-}
-void push(stack &s,node x)
-{
-	if(!full(s))
-	s.list[++s.top]=x;
-}
-node pop(stack &s)
-{ node x;
-	if(!empty(s))
-	x=s.list[s.top--];
-	return x;
-}
-int main()
-{
-	int n;stack s;node x;
-	int t1; char *t2 ; char *t3 ;
-	printf("\n nhap vao so phan tu:");
-	scanf("%d",&n);
-	khoitao(s);
-	for(int i=0;i<n;i++)
-	{
-		printf("\n nhap ma so:");
-		scanf("%d",&x.maso);
-		printf("\n nhap ho ten:");
-		fflush(stdin);
-		gets(x.hoten);
-		printf("\n nhap dia chi :");
-		fflush(stdin);
-		gets(x.diachi);
-		push(s,x);
-	}
-while(!empty(s))
-{
-	x=pop(s);
-     printf("\nMa so:%d Ho ten:%s Dia chi:%s",x.maso,x.hoten,x.diachi);
-     /*  printf("\n ma so:%d",x.maso);
-       printf("\n ho ten:%s",x.hoten);
-       printf("\n dia chi:%s",x.diachi);
-      */
-}
-}
-Stack cài đặt bằng danh sách liên kết
+```
+
+### Stack cài đặt bằng danh sách liên kết
+
+```cpp
 #include <stdio.h>
 #include<conio.h>
-typedef struct sinhvien
-{
-	char hoten[40];
-	int tuoi;
-}sinhvien;
-typedef struct node
-{
-	sinhvien data;
-	node *link;
-}node;
-typedef struct stack
-{
-	node *top;
 
+typedef struct sinhvien { char hoten[40]; int tuoi; } sinhvien;
+typedef struct node { sinhvien data; node *link; } node;
+typedef struct stack { node *top; } stack;
 
-}stack;
-void khoitao(stack &s)
-{
-	s.top=NULL;
-}
-int empty(stack s)
-{
-	return s.top==NULL?1:0;
+void khoitao(stack &s) { s.top = NULL; }
+int empty(stack s) { return s.top == NULL ? 1 : 0; }
 
+void push(stack &s, sinhvien x) {
+    node *p = new(node);
+    p->data = x; p->link = s.top; s.top = p;
 }
-void push(stack &s,sinhvien x)
-{
-	node *p;
-	p=new(node);
-	p->data=x;
-	p->link=s.top;
-	s.top=p;
+
+sinhvien pop(stack &s) {
+    node *p;
+    if (!empty(s)) p = s.top;
+    s.top = p->link;
+    return p->data;
 }
-sinhvien pop(stack &s)
-{
-	node *p;
-	if(!empty(s))
-		p=s.top;
-		s.top=p->link;
-	return p->data;
+
+int main() {
+    int n; stack s; sinhvien x;
+    printf("\nnhap vao so phan tu:"); scanf("%d", &n);
+    khoitao(s);
+    for (int i = 0; i < n; i++) {
+        printf("\nnhap ho ten:"); fflush(stdin); gets(x.hoten);
+        printf("\nnhap tuoi:"); scanf("%d", &x.tuoi);
+        push(s, x);
+    }
+    while (!empty(s)) {
+        x = pop(s);
+        printf("\nho ten :%s", x.hoten);
+        printf("\ntuoi:%d", x.tuoi);
+    }
+    getch();
 }
-int main()
-{
-	int n;stack s;sinhvien x;
-	printf("\nmhap vao so phan tu:");
-	scanf("%d",&n);
-	khoitao(s);
-	for(int i=0;i<n;i++)
-	{
-		printf("\nnhap ho ten:");
-		fflush(stdin);gets(x.hoten);
-		printf("\nnhap tuoi:");
-		scanf("%d",&x.tuoi);
-		push(s,x);
-	}
-	while(!empty(s))
-	{
-		x=pop(s);
-		printf("\nho ten :%s",x.hoten);
-		printf("\ntuoi:%d",x.tuoi);
-	}
-	getch();
-}
-Bài 5: Cấu trúc hàng đợi (Queue)
-Queue cài đặt bằng mảng
+```
+
+---
+
+## Bài 5: Cấu trúc hàng đợi (Queue)
+
+### Queue cài đặt bằng mảng
+
+```cpp
 #include"stdio.h"
 #include"conio.h"
 #define N 20
-typedef struct node
-{
-	char hoten[40];
-	int tuoi;
-}node;
-typedef struct Queu
-{
-	int front,rear;
-	node list[N];
-}Queu;
-void khoitao(Queu &q)
-{
-	q.front=q.rear=-1;
-}
-int empty(Queu q)
-{
-	if((q.front==-1)&&(q.rear==-1))
-	return 1;
-	else
-	return 0;
-}
-int full(Queu q)
-{
-	if(q.front==0&&q.rear==N-1)
-	return 1;
-	if(q.front==q.rear+1)
-	return 1;
-	else
-	return 0;
-}
-void enqueu(Queu &q,node x)
-{
-	if(!full(q))
-	{
-		if(empty(q))
-		q.front=q.rear=0;
-		else
-		if(q.rear==N-1)
-		q.rear=0;
-		else
-		q.rear=q.rear+1;
-		q.list[q.rear]=x;
-	}
-}
-node dequeu(Queu &q)
-{
-	if(!empty(q))
-	{
-		node t=q.list[q.front];
-		if(q.front==q.rear)
-		khoitao(q);
-		else
-		if(q.front==N-1)
-		q.front=0;
-		else
-		q.front=q.front+1;
-		return t;
-	 }
-}
-int main()
-{
-	int n; node x;Queu q;
-	printf("nhap so phan tu:");
-	scanf("%d",&n);
-	khoitao(q);
-	for(int i=1;i<=n;i++)
-	{
-		printf("nhap ho ten:");
-		fflush(stdin);
-		gets(x.hoten);
-		printf("nhap tuoi:");
-		scanf("%d",&x.tuoi);
-		enqueu(q,x);
-	}
-	while(!empty(q))
-	{
-		x=dequeu(q);
-		printf("\n hotenL:%s",x.hoten);
-		printf("\n tuoi:%d",x.tuoi);
-	}
-	getch();
+
+typedef struct node { char hoten[40]; int tuoi; } node;
+typedef struct Queu { int front, rear; node list[N]; } Queu;
+
+void khoitao(Queu &q) { q.front = q.rear = -1; }
+int empty(Queu q) { return (q.front == -1 && q.rear == -1) ? 1 : 0; }
+int full(Queu q) {
+    if (q.front == 0 && q.rear == N - 1) return 1;
+    if (q.front == q.rear + 1) return 1;
+    return 0;
 }
 
-Queue cài đặt bằng danh sách liên kết
+void enqueu(Queu &q, node x) {
+    if (!full(q)) {
+        if (empty(q)) q.front = q.rear = 0;
+        else if (q.rear == N - 1) q.rear = 0;
+        else q.rear = q.rear + 1;
+        q.list[q.rear] = x;
+    }
+}
+
+node dequeu(Queu &q) {
+    if (!empty(q)) {
+        node t = q.list[q.front];
+        if (q.front == q.rear) khoitao(q);
+        else if (q.front == N - 1) q.front = 0;
+        else q.front = q.front + 1;
+        return t;
+    }
+}
+
+int main() {
+    int n; node x; Queu q;
+    printf("nhap so phan tu:"); scanf("%d", &n);
+    khoitao(q);
+    for (int i = 1; i <= n; i++) {
+        printf("nhap ho ten:"); fflush(stdin); gets(x.hoten);
+        printf("nhap tuoi:"); scanf("%d", &x.tuoi);
+        enqueu(q, x);
+    }
+    while (!empty(q)) {
+        x = dequeu(q);
+        printf("\n hoten:%s", x.hoten);
+        printf("\n tuoi:%d", x.tuoi);
+    }
+    getch();
+}
+```
+
+### Queue cài đặt bằng danh sách liên kết
+
+```cpp
 #include<stdio.h>
 #include<conio.h>
-# define N 20
-typedef struct sinhvien
-{
- char hoten[40];
- int tuoi;
-}sinhvien;
-typedef struct node
-{
- sinhvien data;
- node *link;
-}node;
-typedef struct queu
-{
- node *front;
- node *rear;
-}queu;
-void khoitao(queu &q)
-{
- q.front=q.rear=NULL;
-}
-int empty(queu q)
-{
- if(q.front==NULL)
- return 1;
- else
- return 0;
-}
-void enqueu(queu &q, node*new_ele)
-{
- if(q.front==NULL)
- {
-  q.front=new_ele;
-  q.rear=q.front;
- }
-  else
-  {
-   q.rear->link=new_ele;
-   q.rear=new_ele;
-  }
- }
-sinhvien dequeu(queu &q)
-{
- node *p;sinhvien x;
- if(!empty(q))
- {
-  p=q.front;
-  x=p->data;
-  q.front=p->link;
-  delete(p);
-  }
- return x;
-}
-int main()
-{
- int n;
- sinhvien x;
- queu q;
- node *new_ele;
- printf("\n nhap so phan tu:");
- scanf("%d",&n);
- khoitao(q);
- for(int i=1; i<=n; i++)
-  {
-   printf("\n nhap hoten:");
-   fflush(stdin);
-   gets(x.hoten);
-   printf("\n nhap tuoi:");
-   scanf("%d", &x.tuoi);
-   new_ele=new(node);
-   new_ele->data=x;
-   new_ele->link=NULL;
-   enqueu(q,new_ele);
-  }
- while(!empty(q))
-  {
-   x=dequeu(q);
-   printf("\n hoten:%s", x.hoten);
-   printf("\n tuoi:%d", x.tuoi);
-  }
- getch();
- }
- 
-Bài 6: Cấu trúc cây nhị phân
-#include"stdio.h"
-#include"conio.h"
-#include"string.h"
-typedef struct sv
-{
-	char hoten[40];
-	int tuoi;
-}sv;
-typedef struct node
-{
-	sv data;
-	node *left;
-	node *right;
-}node;
-typedef struct node *TREE;
-	TREE root;
-void taocay(TREE &root)
-{
-	sv x;
-	printf("\n nhap thong tin sv:");
-	printf("\n nhap ho ten:");
-	fflush(stdin);
-	gets(x.hoten);
-	if(strcmp(x.hoten,"n")!=0)
-	{	printf("\n nhap tuoi:");
-		scanf("%d",&x.tuoi);
-	}
-	if(strcmp(x.hoten,"n")!=0)
-	{
-		root=new (node);
-		root->data=x;
-		printf("\n cay con trai cua:%s",x.hoten);
-			taocay(root->left);
-		printf("\n cay con phai cua:%s",x.hoten);
-			taocay(root->right);
-	}else
-		root=NULL;
-}
-void NLR(TREE root)
-{
-	if(root!=NULL)
-	{
-		printf("\n ho ten:%s",root->data.hoten);
-		printf("\n tuoi:%d",root->data.tuoi);
-		NLR(root->left);
-		NLR(root->right);
-	}
-}
-void LRN(TREE root)
-{
-	if(root!=NULL)
-	{
-		LRN(root->left);
-		LRN(root->right);
-		printf("\n ho ten:%s",root->data.hoten);
-		printf("\n tuoi:%d",root->data.tuoi);
-	}
-}
-void LNR(TREE root)
-{
-	if(root!=NULL)
-	{
-		LNR(root->left);
-		printf("\n ho ten:%s",root->data.hoten);
-		printf("\n tuoi:%d",root->data.tuoi);
-		LNR(root->right);
-	}
-}
-int max(int a,int b)
-{
-	if(a>b)
-		return a;
-	else
-		return b;
-}
-int chieucao(TREE root)
-{
-	if(root==NULL)
-		return 0;
-	else
-		return max(chieucao(root->left),chieucao(root->right))+1;
-}
-int demla(TREE r)
-{    int dem=0;
-	if(r==NULL)
-	return 0;
-	else
-	{       if((r->left==NULL)&&(r->right==NULL))
-	 dem++;
-	 return (demla(r->left)+demla(r->right)+dem);
-	 }
+#define N 20
+
+typedef struct sinhvien { char hoten[40]; int tuoi; } sinhvien;
+typedef struct node { sinhvien data; node *link; } node;
+typedef struct queu { node *front; node *rear; } queu;
+
+void khoitao(queu &q) { q.front = q.rear = NULL; }
+int empty(queu q) { return q.front == NULL ? 1 : 0; }
+
+void enqueu(queu &q, node *new_ele) {
+    if (q.front == NULL) { q.front = new_ele; q.rear = q.front; }
+    else { q.rear->link = new_ele; q.rear = new_ele; }
 }
 
-int main()
-{
-	TREE t;
-	taocay(t);
-	printf("\n duyet cay theo thu tu truoc:");
-		NLR(t);
-	printf("\n duyet cay theo thu tu sau:");
-		LRN(t);
-	printf("\n duyet cay theo thu tu giua:");
-		LNR(t);
-       printf("\n So nut la: %d",demla(t));
-	getch();
+sinhvien dequeu(queu &q) {
+    node *p; sinhvien x;
+    if (!empty(q)) { p = q.front; x = p->data; q.front = p->link; delete(p); }
+    return x;
 }
- 
-Bài 7: Cây nhị phân tìm kiếm
+
+int main() {
+    int n; sinhvien x; queu q; node *new_ele;
+    printf("\n nhap so phan tu:"); scanf("%d", &n);
+    khoitao(q);
+    for (int i = 1; i <= n; i++) {
+        printf("\n nhap hoten:"); fflush(stdin); gets(x.hoten);
+        printf("\n nhap tuoi:"); scanf("%d", &x.tuoi);
+        new_ele = new(node); new_ele->data = x; new_ele->link = NULL;
+        enqueu(q, new_ele);
+    }
+    while (!empty(q)) {
+        x = dequeu(q);
+        printf("\n hoten:%s", x.hoten);
+        printf("\n tuoi:%d", x.tuoi);
+    }
+    getch();
+}
+```
+
+---
+
+## Bài 6: Cấu trúc cây nhị phân
+
+```cpp
 #include"stdio.h"
 #include"conio.h"
 #include"string.h"
-typedef struct sinhvien
-{
-	char hoten[40];
-	int tuoi;
-}sv;
-typedef struct node
-{
-	sv data;
-	node *left;
-	node *right;
-}node;
+
+typedef struct sv { char hoten[40]; int tuoi; } sv;
+typedef struct node { sv data; node *left; node *right; } node;
 typedef struct node *TREE;
-	TREE root;
-void khoitao(TREE &root)
-{
-	root=NULL;
+TREE root;
+
+void taocay(TREE &root) {
+    sv x;
+    printf("\n nhap ho ten:"); fflush(stdin); gets(x.hoten);
+    if (strcmp(x.hoten, "n") != 0) { printf("\n nhap tuoi:"); scanf("%d", &x.tuoi); }
+    if (strcmp(x.hoten, "n") != 0) {
+        root = new(node); root->data = x;
+        printf("\n cay con trai cua:%s", x.hoten); taocay(root->left);
+        printf("\n cay con phai cua:%s", x.hoten); taocay(root->right);
+    } else root = NULL;
 }
-void chennode(TREE &root, sv x)
-{
-	if(root!=NULL)
-	{
-		if(strcmp(root->data.hoten,x.hoten)==0) return ;
-			if(root->data.tuoi>x.tuoi)
-				chennode(root->left,x);
-			else
-				chennode(root->right,x);
-	}
-	else
-	{
-		root=new(node);
-		root->data=x;
-		root->left=root->right=NULL;
-	}
+
+void NLR(TREE root) {
+    if (root != NULL) {
+        printf("\n ho ten:%s", root->data.hoten); printf("\n tuoi:%d", root->data.tuoi);
+        NLR(root->left); NLR(root->right);
+    }
 }
-void taocay(TREE &root)
-{
-	int n;
-	sv x;
-	printf("\n nhap so sv:");
-	scanf("%d",&n);
-	printf("\n nhap thong tin cho sv:");
-	for(int i=1;i<=n;i++)
-	{
-		printf("\n nhap ho ten:");
-		fflush(stdin);
-		gets(x.hoten);
-		printf("\n nhap tuoi:");
-		scanf("%d",&x.tuoi);
-			chennode(root,x);
-	}
+
+void LRN(TREE root) {
+    if (root != NULL) { LRN(root->left); LRN(root->right); printf("\n ho ten:%s tuoi:%d", root->data.hoten, root->data.tuoi); }
 }
-void NLR(TREE root)
-{
-	if(root!=NULL)
-	{
-		printf("\n ho ten:%s tuoi:%d",root->data.hoten,root->data.tuoi);
-		NLR(root->left);
-		NLR(root->right);
-	}
+
+void LNR(TREE root) {
+    if (root != NULL) { LNR(root->left); printf("\n ho ten:%s tuoi:%d", root->data.hoten, root->data.tuoi); LNR(root->right); }
 }
-void LRN(TREE root)
-{
-	if(root!=NULL)
-	{
-		LRN(root->left);
-		LRN(root->right);
-		printf("\n ho ten:%s tuoi:%d",root->data.hoten,root->data.tuoi);
-	}
+
+int max(int a, int b) { return a > b ? a : b; }
+int chieucao(TREE root) { return root == NULL ? 0 : max(chieucao(root->left), chieucao(root->right)) + 1; }
+
+int demla(TREE r) {
+    int dem = 0;
+    if (r == NULL) return 0;
+    if ((r->left == NULL) && (r->right == NULL)) dem++;
+    return (demla(r->left) + demla(r->right) + dem);
 }
-void LNR(TREE root)
-{
-	if(root!=NULL)
-	{
-		LNR(root->left);
-		printf("\n ho ten:%s tuoi:%d",root->data.hoten,root->data.tuoi);
-		LNR(root->right);
-	}
+
+int main() {
+    TREE t; taocay(t);
+    printf("\n duyet cay theo thu tu truoc:"); NLR(t);
+    printf("\n duyet cay theo thu tu sau:"); LRN(t);
+    printf("\n duyet cay theo thu tu giua:"); LNR(t);
+    printf("\n So nut la: %d", demla(t));
+    getch();
 }
-int max(int a,int b)
-{
-	if(a>b)
-		return a;
-	else
-		return b;
+```
+
+---
+
+## Bài 7: Cây nhị phân tìm kiếm (BST)
+
+```cpp
+#include"stdio.h"
+#include"conio.h"
+#include"string.h"
+
+typedef struct sinhvien { char hoten[40]; int tuoi; } sv;
+typedef struct node { sv data; node *left; node *right; } node;
+typedef struct node *TREE;
+TREE root;
+
+void khoitao(TREE &root) { root = NULL; }
+
+void chennode(TREE &root, sv x) {
+    if (root != NULL) {
+        if (strcmp(root->data.hoten, x.hoten) == 0) return;
+        if (root->data.tuoi > x.tuoi) chennode(root->left, x);
+        else chennode(root->right, x);
+    } else {
+        root = new(node); root->data = x; root->left = root->right = NULL;
+    }
 }
-int chieucao(TREE root)
-{
-	if(root==NULL)
-		return 0;
-	else
-		return max(chieucao(root->left),chieucao(root->right))+1;
+
+void taocay(TREE &root) {
+    int n; sv x;
+    printf("\n nhap so sv:"); scanf("%d", &n);
+    for (int i = 1; i <= n; i++) {
+        printf("\n nhap ho ten:"); fflush(stdin); gets(x.hoten);
+        printf("\n nhap tuoi:"); scanf("%d", &x.tuoi);
+        chennode(root, x);
+    }
 }
-node *tim(TREE root,sv x)
-{
-	if(root!=NULL)
-	{
-		if(root->data.tuoi==x.tuoi)
-			return root;
-		if(root->data.tuoi>x.tuoi)
-			return tim(root->left,x);
-		return tim(root->right,x);
-	}
-	return NULL;
+
+void NLR(TREE root) { if (root != NULL) { printf("\n ho ten:%s tuoi:%d", root->data.hoten, root->data.tuoi); NLR(root->left); NLR(root->right); } }
+void LRN(TREE root) { if (root != NULL) { LRN(root->left); LRN(root->right); printf("\n ho ten:%s tuoi:%d", root->data.hoten, root->data.tuoi); } }
+void LNR(TREE root) { if (root != NULL) { LNR(root->left); printf("\n ho ten:%s tuoi:%d", root->data.hoten, root->data.tuoi); LNR(root->right); } }
+
+int max(int a, int b) { return a > b ? a : b; }
+int chieucao(TREE root) { return root == NULL ? 0 : max(chieucao(root->left), chieucao(root->right)) + 1; }
+
+node *tim(TREE root, sv x) {
+    if (root != NULL) {
+        if (root->data.tuoi == x.tuoi) return root;
+        if (root->data.tuoi > x.tuoi) return tim(root->left, x);
+        return tim(root->right, x);
+    }
+    return NULL;
 }
-void timthaythe(TREE &p,TREE &q)
-{
-	if(q->right!=NULL)
-		timthaythe(p,q->right);
-	else
-	{
-	 p->data=q->data;
-	 p=q;
-	 if(q->left!=NULL)
-	 q=q->left;
-	 else
-	 q=q->right;
-	}
+
+void timthaythe(TREE &p, TREE &q) {
+    if (q->right != NULL) timthaythe(p, q->right);
+    else { p->data = q->data; p = q; if (q->left != NULL) q = q->left; else q = q->right; }
 }
-void huy(TREE &root,sv x)
-{
-	if(root==NULL)
-		return;
-	if(root->data.tuoi>x.tuoi)
-		 huy(root->left,x);
-	if(root->data.tuoi<x.tuoi)
-		huy(root->right,x);
-	if(root->data.tuoi==x.tuoi)
-	{
-	node *p=root;
-	if(root->left==NULL)
-		root=root->right;
-	else
-		if(root->right==NULL)
-			root=root->left;
-		else
-			timthaythe(p,root->left);
-			delete(p);
-	}
+
+void huy(TREE &root, sv x) {
+    if (root == NULL) return;
+    if (root->data.tuoi > x.tuoi) huy(root->left, x);
+    if (root->data.tuoi < x.tuoi) huy(root->right, x);
+    if (root->data.tuoi == x.tuoi) {
+        node *p = root;
+        if (root->left == NULL) root = root->right;
+        else if (root->right == NULL) root = root->left;
+        else timthaythe(p, root->left);
+        delete(p);
+    }
 }
-void xoacay(TREE &root)
-{
-	if(root!=NULL)
-	{
-		xoacay(root->left);
-		xoacay(root->right);
-		huy(root,root->data);
-	}
+
+int main() {
+    TREE t; sv x, y, z;
+    khoitao(t); taocay(t);
+    printf("\n duyet cay theo thu tu truoc:"); NLR(t);
+    printf("\n duyet cay theo thu tu sau:"); LRN(t);
+    printf("\n duyet cay theo thu tu giua:"); LNR(t);
+    printf("\n chieu cao cay la:%d", chieucao(t));
+    printf("\n sv can xoa co tuoi la: "); scanf("%d", &z.tuoi);
+    huy(t, z);
+    printf("\n cay sau khi xoa:"); NLR(t);
+    getch();
 }
-int main()
-{
-	TREE t;
-	sv x,y,z;
-	khoitao(t);
-	taocay(t);
-	/*printf("\n duyet cay theo thu tu truoc:");
-		NLR(t);
-	printf("\n nhap sinh vien moi:");
-	printf("\n nhap ho ten:");
-	fflush(stdin);
-	gets(x.hoten);
-	printf("\n nhap tuoi:");
-	scanf("%d",&x.tuoi);
-	chennode(t,x);*/
-	printf("\n duyet cay theo thu tu truoc:");
-		NLR(t);
-	printf("\n duyet cay theo thu tu sau:");
-		LRN(t);
-	printf("\n duyet cay theo thu tu giua:");
-		LNR(t);
-	printf("\n chieu cao cay la:%d",chieucao(t));
-  /*	printf("\n sv can tim co tuoi la:");
-	scanf("%d",&y.tuoi);
-	printf("\n sv can tim la:");
-	node *p=tim(t,y);
-	printf("\n ho ten:%s tuoi:%d",p->data.hoten,p->data.tuoi);*/
-	printf("\n sv can xoa co tuoi la: ");
-	scanf("%d",&z.tuoi);
-		huy(t,z);
-	/*printf("\n cay sau khi xoa la:");
-		NLR(t);*/
-	printf("\n cay sau khi xoa het la:");
-	      //	xoacay(t);
-		NLR(t);
-	getch();
-}
- 
-Bài 8: Cấu trúc cây đa phân (B cây)
+```
+
+---
+
+## Bài 8: Cấu trúc cây đa phân (B-Cây)
+
+```c
 #include <stdio.h>
 #include <conio.h>
 #define M 5
-struct node{
-int n; /* So cay con cua nut */
-int keys[M-1]; /*mang chua khoa cua nut*/
-struct node *p[M]; /* con tro tro den cac cay con */
-}*root=NULL;
-enum KeyStatus { Duplicate,SearchFailure,Success,InsertIt,LessKeys };
+
+struct node {
+    int n;
+    int keys[M-1];
+    struct node *p[M];
+} *root = NULL;
+
+enum KeyStatus { Duplicate, SearchFailure, Success, InsertIt, LessKeys };
+
 void insert(int key);
-void display(struct node *root,int);
+void display(struct node *root, int);
 void DelNode(int x);
 void search(int x);
-enum KeyStatus ins(struct node *r, int x, int* y, struct node** u);
-int searchPos(int x,int *key_arr, int n);
+enum KeyStatus ins(struct node *r, int x, int *y, struct node **u);
+int searchPos(int x, int *key_arr, int n);
 enum KeyStatus del(struct node *r, int x);
 
-int main()
-{
-int key;
-int choice;
-printf("TAO B CAY BAC %d:\n",M);
-while(choice!=5)
-{
-printf("1.Chen nut\n");
-printf("2.Xoa nut\n");
-printf("3.Tim khoa\n");
-printf("4.Duyet cay\n");
-printf("5.Thoat\n");
-printf("Chon chuc nang:");
-scanf("%d",&choice);
-switch(choice)
-{
-case 1:
-printf("Nhap vao khoa:");
-scanf("%d",&key);
-insert(key);
-break;
-case 2:
-printf("Nhap vao khoa:");
-scanf("%d",&key);
-DelNode(key);
-break;
-case 3:
-printf("Nhap vao khoa:");
-scanf("%d",&key);
-search(key);
-break;
-case 4:
-printf("B cay da nhap:\n");
-display(root,0);
-break;
-case 5:
-break;
-default:
-printf("Nhap sai chuc nang!\n");
-break;
-}
-}
+int main() {
+    int key, choice;
+    printf("TAO B CAY BAC %d:\n", M);
+    while (choice != 5) {
+        printf("1.Chen nut\n2.Xoa nut\n3.Tim khoa\n4.Duyet cay\n5.Thoat\n");
+        printf("Chon chuc nang:"); scanf("%d", &choice);
+        switch (choice) {
+            case 1: printf("Nhap vao khoa:"); scanf("%d", &key); insert(key); break;
+            case 2: printf("Nhap vao khoa:"); scanf("%d", &key); DelNode(key); break;
+            case 3: printf("Nhap vao khoa:"); scanf("%d", &key); search(key); break;
+            case 4: printf("B cay da nhap:\n"); display(root, 0); break;
+            case 5: break;
+            default: printf("Nhap sai chuc nang!\n");
+        }
+    }
 }
 
-void insert(int key)
-{
-struct node *newnode;
-int upKey;
-enum KeyStatus value;
-value = ins(root, key, &upKey, &newnode);
-if (value == Duplicate)
-printf("Khoa da co trong cay roi!\n");
-if (value == InsertIt)
-{
-struct node *uproot = root;
-root=new(node);
-root->n = 1;
-root->keys[0] = upKey;
-root->p[0] = uproot;
-root->p[1] = newnode;
-}/*End of if */
-}/*End of insert()*/
+// (Các hàm insert, ins, display, search, searchPos, DelNode, del — xem mã nguồn đầy đủ trong tài liệu gốc)
+```
 
-enum KeyStatus ins(struct node *ptr, int key, int *upKey,struct node
-**newnode)
-{
-struct node *newPtr, *lastPtr;
-int pos, i, n,splitPos;
-int newKey, lastKey;
-enum KeyStatus value;
-if (ptr == NULL)
-{
-*newnode = NULL;
-*upKey = key;
-return InsertIt;
-}
-n = ptr->n;
-pos = searchPos(key, ptr->keys, n);
-if (pos < n && key == ptr->keys[pos])
-return Duplicate;
-value = ins(ptr->p[pos], key, &newKey, &newPtr);
-if (value != InsertIt)
-return value;
-/*So khoa nho hon M-1 */
-if (n < M - 1)
-{
-pos = searchPos(newKey, ptr->keys, n);
-for (i=n; i>pos; i--)
-{
-ptr->keys[i] = ptr->keys[i-1];
-ptr->p[i+1] = ptr->p[i];
-}
-ptr->keys[pos] = newKey;
-ptr->p[pos+1] = newPtr;
-++ptr->n; 
-return Success;
-}/*End of if */
+---
 
-if (pos == M - 1)
-{
-lastKey = newKey;
-lastPtr = newPtr;
-}
-else 
-{
-lastKey = ptr->keys[M-2];
-lastPtr = ptr->p[M-1];
-for (i=M-2; i>pos; i--)
-{
-ptr->keys[i] = ptr->keys[i-1];
-ptr->p[i+1] = ptr->p[i];
-}
-ptr->keys[pos] = newKey;
-ptr->p[pos+1] = newPtr;
-}
-splitPos = (M - 1)/2;
-(*upKey) = ptr->keys[splitPos];
+## Bài 9: Cấu trúc bảng băm
 
-(*newnode)=new(node);
-ptr->n = splitPos; 
-(*newnode)->n = M-1-splitPos;
-for (i=0; i < (*newnode)->n; i++)
-{
-(*newnode)->p[i] = ptr->p[i + splitPos + 1];
-if(i < (*newnode)->n - 1)
-(*newnode)->keys[i] = ptr->keys[i + splitPos + 1];
-else
-(*newnode)->keys[i] = lastKey;
-}
-(*newnode)->p[(*newnode)->n] = lastPtr;
-return InsertIt;
-}/*End of ins()*/
+### Băm tuyến tính
 
-void display(struct node *ptr, int blanks)
-{
-if (ptr)
-{
-int i;
-for(i=1;i<=blanks;i++)
-printf(" ");
-for (i=0; i < ptr->n; i++)
-printf("%d ",ptr->keys[i]);
-printf("\n");
-for (i=0; i <= ptr->n; i++)
-display(ptr->p[i], blanks+10);
-}/*End of if*/
-}/*End of display()*/
-
-void search(int key)
-{
-int pos, i, n;
-struct node *ptr = root;
-printf("Search path:\n");
-while (ptr)
-{
-n = ptr->n;
-for (i=0; i < ptr->n; i++)
-printf(" %d",ptr->keys[i]);
-printf("\n");
-pos = searchPos(key, ptr->keys, n);
-if (pos < n && key == ptr->keys[pos])
-{
-printf("Khoa %d tim thay o vi tri %d cua nut\n",key,i);
-return;
-}
-ptr = ptr->p[pos];
-}
-printf("Khoa %d khong ton tai trong cay\n",key);
-}/*End of search()*/
-
-int searchPos(int key, int *key_arr, int n)
-{
-int pos=0;
-while (pos < n && key > key_arr[pos])
-pos++;
-return pos;
-}/*End of searchPos()*/
-
-void DelNode(int key)
-{
-struct node *uproot;
-enum KeyStatus value;
-value = del(root,key);
-switch (value)
-{
-case SearchFailure:
-printf("Khoa %d khong ton tai trong cay\n",key);
-break;
-case LessKeys:
-uproot = root;
-root = root->p[0];
-delete(uproot);
-break;
-}/*End of switch*/
-}/*End of delnode()*/
-
-enum KeyStatus del(struct node *ptr, int key)
-{
-int pos, i, pivot, n ,min;
-int *key_arr;
-enum KeyStatus value;
-struct node **p,*lptr,*rptr;
-
-if (ptr == NULL)
-return SearchFailure;
-/*Gan gia tri cua nut*/
-n=ptr->n;
-key_arr = ptr->keys;
-p = ptr->p;
-min = (M - 1)/2;/*Kiem tra so phan tu toi thieu cua nut*/
-
-pos = searchPos(key, key_arr, n);
-if (p[0] == NULL)
-{
-if (pos == n || key < key_arr[pos])
-return SearchFailure;
-for (i=pos+1; i < n; i++)
-{
-key_arr[i-1] = key_arr[i];
-p[i] = p[i+1];
-}
-return --ptr->n >= (ptr==root ? 1 : min) ? Success : LessKeys;
-}/*End of if */
-
-if (pos < n && key == key_arr[pos])
-{
-struct node *qp = p[pos], *qp1;
-int nkey;
-while(1)
-{
-nkey = qp->n;
-qp1 = qp->p[nkey];
-if (qp1 == NULL)
-break;
-qp = qp1;
-}/*End of while*/
-key_arr[pos] = qp->keys[nkey-1];
-qp->keys[nkey - 1] = key;
-}/*End of if */
-value = del(p[pos], key);
-if (value != LessKeys)
-return value;
-
-if (pos > 0 && p[pos-1]->n > min)
-{
-pivot = pos - 1; 
-lptr = p[pivot];
-rptr = p[pos];
-/*Gan gia tri cho nut ben phai*/
-rptr->p[rptr->n + 1] = rptr->p[rptr->n];
-for (i=rptr->n; i>0; i--)
-{
-rptr->keys[i] = rptr->keys[i-1];
-rptr->p[i] = rptr->p[i-1];
-}
-rptr->n++;
-rptr->keys[0] = key_arr[pivot];
-rptr->p[0] = lptr->p[lptr->n];
-key_arr[pivot] = lptr->keys[--lptr->n];
-return Success;
-}/*End of if */
-if (pos > min)
-{
-pivot = pos; 
-lptr = p[pivot];
-rptr = p[pivot+1];
-/*Gan gia tri cho nut ben trai*/
-lptr->keys[lptr->n] = key_arr[pivot];
-lptr->p[lptr->n + 1] = rptr->p[0];
-key_arr[pivot] = rptr->keys[0];
-lptr->n++;
-rptr->n--;
-for (i=0; i < rptr->n; i++)
-{
-rptr->keys[i] = rptr->keys[i+1];
-rptr->p[i] = rptr->p[i+1];
-}/*End of for*/
-rptr->p[rptr->n] = rptr->p[rptr->n + 1];
-return Success;
-}/*End of if */
-
-if(pos == n)
-pivot = pos-1;
-else
-pivot = pos;
-
-lptr = p[pivot];
-rptr = p[pivot+1];
-/*Tron nut ben phai voi nut ben trai*/
-lptr->keys[lptr->n] = key_arr[pivot];
-lptr->p[lptr->n + 1] = rptr->p[0];
-for (i=0; i < rptr->n; i++)
-{
-lptr->keys[lptr->n + 1 + i] = rptr->keys[i];
-lptr->p[lptr->n + 2 + i] = rptr->p[i+1];
-}
-lptr->n = lptr->n + rptr->n +1;
-delete(rptr); /*Xoa nut ben phai*/
-for (i=pos+1; i < n; i++)
-{
-key_arr[i-1] = key_arr[i];
-p[i] = p[i+1];
-}
-return --ptr->n >= (ptr == root ? 1 : min) ? Success : LessKeys;
-}/*End of del()*/
- 
-Bài 9: Cấu trúc bảng băm
-Băm tuyến tính
-#include "stdio.h"
-#include "stdlib.h"
-#include "conio.h"
-#include "time.h"
-
-#define TRUE 1
-#define FALSE 0
-#define NULLKEY -1
-#define M 10
-
-//Khai bao cau truc mot nut cua bang bam
-struct node
-{
-	int key;	//khoa cua nut tren bam
-};
-
-//Khai bao bang bam co M nut
-struct node hashtable[M];
-int N;	//bien toan cuc chi so nut hien co tren bang bam
-//ham bam
-int hashfunc(int key)
-{
-	return(key % M);
-}
-//Khoi dong bang bam
-void initialize()
-{
-	int i;
-	for(i=0;i<M;i++)
-		hashtable[i].key = NULLKEY;
-	N=0;	// so nut hien co khoi dong bang 0
-}
-//Tac vu empty : kiem tra ca bang bam co rong hay khong
-int empty()
-{
-	return (N==0 ? TRUE : FALSE);
-}
-
-//Tac vu full : kiem tra bang bam co day chua
-int full()
-{
-	return (N==M-1 ? TRUE : FALSE);
-}
-//Tac vu search : tim kiem nut co khoa k tren bang bam
-int search(int k)
-{
-	int i;
-	i=hashfunc(k);
-	while(hashtable[i].key!=k && hashtable[i].key!=NULLKEY)
-	{
-		//bam lai(theo phuong phap do tuyen tinh): hi(key)=h(key)+i % M
-		i=i+1;
-		if(i>=M)
-			i=i-M;
-	}
-	if(hashtable[i].key==k)	//tim thay
-		return(i);
-	else
-		return(M);	//khong tim thay
-}
-//tac vu insert : them nut co khoa k vao bang bam
-int insert(int k)
-{
-	int i,j;
-	if(full())
-	{
-		printf("Bang bam bi day khong the them nut co khoa %d duoc",k);
-		return 0;
-	}
-	if(search(k)<M)
-	{
-		printf("So nay da co trong bang bam");
-		return 0;
-	}
-	i=hashfunc(k);
-	while(hashtable[i].key!=NULLKEY)
-	{
-		//bam lai theo phuong phap tuyen tinh
-		i++;
-		if(i>=M)
-			i=i-M;
-	}
-	hashtable[i].key=k;
-	N=N+1;
-	return(i);
-}
-//tac vu remove : xoa nut tai dia chi i tren bang bam
-void remove(int i)
-{
-	int j, r, cont, a;
-	cont= TRUE;
-	do
-	{
-		hashtable[i].key=NULLKEY;
-		j=i;
-		do
-		{
-			i=i+1;
-			if(i>=M)
-				i=i-M;
-			if(hashtable[i].key==NULLKEY)
-				cont=FALSE;
-			else
-			{
-				r=hashfunc(hashtable[i].key);
-				a=(j<r && r<=i) || (r<=i && i<j) || (i<j && j<r);
-			}
-		}while(cont && a);
-		if(cont)
-			hashtable[j].key=hashtable[i].key;
-	}while(cont);
-
-}
-//tac vu viewtable : xem chi tiet bang bam
-void viewtable()
-{
-	int i;
-	for(i=0;i<M;i++)
-		printf("\nTable[%2d] : %4d",i,hashtable[i].key);
-}
-
-//chuong trinh chinh
-int main()
-{
-	int i,n,p,q;
-	int b, key, chucnang;
-	char c;
-	//khoi tao bang bam
-	initialize();
-	do
-	{
-		//menu chinh cua chuong tinh
-		printf("\t\n\nCac chuc nang chinh cua chuong trinh : \n");
-		printf("\t1.Them nut moi vao bang bam\n");
-		printf("\t2.Them ngau nhien mot nut vao bang bam\n");
-		printf("\t3.Xoa nut tren bang bam\n");
-		printf("\t4.Xoa toan bo bang bam\n");
-		printf("\t5.Xem chi tiet bang bam\n");
-		printf("\t6.Tim kiem tren bang bam\n");
-		printf("\t0.Ket thuc chuong trinh\n");
-		printf("\tChuc nang ban chon : ");
-		scanf("%d",&chucnang);
-		switch(chucnang)
-		{
-		case 1:
-			{
-				printf("\nThem nut vao bang bam ");
-				printf("\nKhoa cua nut moi : ");
-				scanf("%d", &key);
-				insert(key);
-				break;
-			}
-		case 2:
-			{
-				srand(time(NULL));
-				printf("\nThem ngau nhien nhieu nut vao bang bam");
-				printf("\nBan muon them bao nhieu nut : ");
-				scanf("%d", &n);
-				for(i=0;i<n;i++)
-				{
-					key=rand()%(100);
-					insert(key);
-				}
-				break;
-			}
-		case 3:
-			{
-				printf("\nXoa nut tren bang bam");
-				printf("\nkhoa cua nut can xoa : ");
-				scanf("%d", &key);
-				i=search(key);
-				if(i==M)
-					printf("Khong co nut voi khoa can xoa");
-				else
-				{
-					remove(i);
-					N--;
-				}
-				break;
-			}
-		case 4:
-			{
-				printf("\nXoa toan bo bang bam");
-				printf("\nBan co chat khong (c/k) : ");
-				c=getch();
-				if(c=='c'||c=='C')
-					initialize();
-				break;
-			}
-		case 5:
-			{
-				printf("\nXem chi tiet bang bam");
-				viewtable();
-				break;
-			}
-		case 6: 
-			{
-				printf("Tim kiem tren bang bam");
-				printf("Khoa can tim : ");
-				scanf("%d",&key);
-				if(search(key)==M)
-					printf("\nKhong tim thay");
-				else
-				{
-					printf("Tim thay tai dia chi %d trong bang bam",search(key));
-					break;
-				}
-			}
-
-		}
-	}while(chucnang!=0);
-}
-
-Băm kép
+```c
 #include "stdio.h"
 #include "stdlib.h"
 #include "conio.h"
@@ -2047,213 +886,64 @@ Băm kép
 #define FALSE 0
 #define NULLKEY -1
 #define M 10
-//Khai bao cau truc mot nut cua bang bam
-struct node
-{
-	int key;	//khoa cua nut tren bam
-};
 
-//Khai bao bang bam co M nut
+struct node { int key; };
 struct node hashtable[M];
-int N;	//bien toan cuc chi so nut hien co tren bang bam
+int N;
 
-//ham bam
-int hashfunc(int key)
-{
-	return(key % M);
+int hashfunc(int key) { return (key % M); }
+void initialize() { for (int i = 0; i < M; i++) hashtable[i].key = NULLKEY; N = 0; }
+int empty() { return (N == 0 ? TRUE : FALSE); }
+int full() { return (N == M - 1 ? TRUE : FALSE); }
+
+int search(int k) {
+    int i = hashfunc(k);
+    while (hashtable[i].key != k && hashtable[i].key != NULLKEY) {
+        i = i + 1; if (i >= M) i = i - M;
+    }
+    return hashtable[i].key == k ? i : M;
 }
 
-//ham bam thu hai
-int hashfunc2(int key)
-{
-	return (M-(key%M));
-}
-//Khoi dong bang bam
-void initialize()
-{
-	int i;
-	for(i=0;i<M;i++)
-		hashtable[i].key = NULLKEY;
-	N=0;	// so nut hien co khoi dong bang 0
+int insert(int k) {
+    if (full()) { printf("Bang bam bi day"); return 0; }
+    if (search(k) < M) { printf("So nay da co trong bang bam"); return 0; }
+    int i = hashfunc(k);
+    while (hashtable[i].key != NULLKEY) { i++; if (i >= M) i -= M; }
+    hashtable[i].key = k; N++; return i;
 }
 
-//Tac vu empty : kiem tra ca bang bam co rong hay khong
-int empty()
-{
-	return (N==0 ? TRUE : FALSE);
-}
+void viewtable() { for (int i = 0; i < M; i++) printf("\nTable[%2d] : %4d", i, hashtable[i].key); }
 
-//Tac vu full : kiem tra bang bam co day chua
-int full()
-{
-	return (N==M-1 ? TRUE : FALSE);
+int main() {
+    int key, chucnang;
+    initialize();
+    do {
+        printf("\n1.Them nut\n2.Them ngau nhien\n3.Xoa nut\n4.Xoa bang\n5.Xem bang\n6.Tim kiem\n0.Ket thuc\n");
+        printf("Chuc nang: "); scanf("%d", &chucnang);
+        switch (chucnang) {
+            case 1: printf("Khoa moi: "); scanf("%d", &key); insert(key); break;
+            case 5: viewtable(); break;
+            case 6: printf("Khoa can tim: "); scanf("%d", &key);
+                if (search(key) == M) printf("\nKhong tim thay");
+                else printf("Tim thay tai dia chi %d", search(key)); break;
+        }
+    } while (chucnang != 0);
 }
-//Tac vu search : tim kiem nut co khoa k tren bang bam
-int search(int k)
-{
-	int i,j;
-	i=hashfunc(k);
-	j=hashfunc2(k);
-	while(hashtable[i].key!=k && hashtable[i].key!=NULLKEY)
-		//bam lai(theo phuong phap bam kep
-		i=(i+j)%M;
-	if(hashtable[i].key==k)	//tim thay
-		return(i);
-	else
-		return(M);
+```
 
-}
+### Băm kép
 
-//tac vu insert : them nut co khoa k vao bang bam
-int insert(int k)
-{
-	int i,j;
-	if(full())
-	{
-		printf("Bang bam bi day khong the them nut co khoa %d duoc",k);
-		return(M);
-	}
-	if(search(k)<M)
-	{
-		printf("So nay da co trong bang bam");
-		return(M);
-	}
-	i=hashfunc(k);
-	j=hashfunc2(k);
-	while(hashtable[i].key!=NULLKEY)
-		//bam lai theo phuong phap tuyen tinh
-		i=(i+j)%M;
-	hashtable[i].key=k;
-	N=N+1;
-	return(i);
-}
-//tac vu remove : xoa nut tai dia chi i tren bang bam
-void remove(int i)
-{
-	int j, r, h, cont, a;
-	cont= TRUE;
+```c
+// Tương tự băm tuyến tính, thêm hàm băm thứ hai:
+int hashfunc2(int key) { return (M - (key % M)); }
 
-	do
-	{
-		h = hashfunc2(hashtable[i].key);
-		hashtable[i].key=NULLKEY;
-		j=i;
-	   do
-	   {
-		i=(i+h)%M;
-		if(hashtable[i].key==NULLKEY)
-			cont=FALSE;
-		else
-		{
-			r=hashfunc(hashtable[i].key);
-			a=(j<r && r<=i) || (r<=i && i<j) || (i<j && j<r);
-		}
-	     }while (cont && a);
-	     if(cont)
-		 hashtable[j].key=hashtable[i].key;
+// Trong search và insert, thay i = i + 1 bằng:
+// i = (i + j) % M;  (với j = hashfunc2(k))
+```
 
-	}while(cont);
+### Băm nối kết (Từ điển)
 
-}
-//tac vu viewtable : xem chi tiet bang bam
-void viewtable()
-{
-	int i;
-	for(i=0;i<M;i++)
-		printf("\nTable[%2d] : %4d\t",i,hashtable[i].key);
-}
-//chuong trinh chinh
-int main()
-{
-	int i,n,p,q;
-	int b, key, chucnang;
-	char c;
-	//khoi tao bang bam
-	initialize();
-	do
-	{
-		//menu chinh cua chuong tinh
-		printf("\t\n\nCac chuc nang chinh cua chuong trinh : \n");
-		printf("\t1.Them nut moi vao bang bam\n");
-		printf("\t2.Them ngau nhien mot nut vao bang bam\n");
-		printf("\t3.Xoa nut tren bang bam\n");
-		printf("\t4.Xoa toan bo bang bam\n");
-		printf("\t5.Xem chi tiet bang bam\n");
-		printf("\t6.Tim kiem tren bang bam\n");
-		printf("\t0.Ket thuc chuong trinh\n");
-		printf("\tChuc nang ban chon : ");
-		scanf("%d",&chucnang);
-		switch(chucnang)
-		{
-		case 1:
-			{
-				printf("\nThem nut vao bang bam ");
-				printf("\nKhoa cua nut moi : ");
-				scanf("%d", &key);
-				insert(key);
-				break;
-			}
-		case 2:
-			{
-				srand(time(NULL));
-				printf("\nThem ngau nhien nhieu nut vao bang bam");
-				printf("\nBan muon them bao nhieu nut : ");
-				scanf("%d", &n);
-				for(i=0;i<n;i++)
-				{
-					key=rand()%(100);
-					insert(key);
-				}
-				break;
-			}
-		case 3:
-			{
-				printf("\nXoa nut tren bang bam");
-				printf("\nkhoa cua nut can xoa : ");
-				scanf("%d", &key);
-				i=search(key);
-				if(i==M)
-					printf("Khong co nut voi khoa can xoa");
-				else
-				{
-					remove(i);
-					N--;
-				}
-				break;
-			}
-		case 4:
-			{
-				printf("\nXoa toan bo bang bam");
-				printf("\nBan co chat khong (c/k) : ");
-				c=getch();
-				if(c=='c'||c=='C')
-					initialize();
-				break;
-			}
-		case 5:
-			{
-				printf("\nXem chi tiet bang bam");
-				viewtable();
-				break;
-			}
-		case 6: 
-			{
-				printf("Tim kiem tren bang bam");
-				printf("Khoa can tim : ");
-				scanf("%d", &key);
-				if(search(key)==M)
-					printf("\nKhong tim thay");
-				else
-				{
-					printf("Tim thay tai dia chi %d trong bang bam",search(key));
-					break;
-				}
-			}
-		     }
-	}while(chucnang!=0);
-}
-
-Băm nối kết
+```c
 #include<stdio.h>
 #include<conio.h>
 #include<string.h>
@@ -2261,767 +951,112 @@ Băm nối kết
 #include<stdlib.h>
 #define M 26
 
-
-typedef struct tudien
-{
-	char tu[10];
-	char nghia[100];
-}tudien;
-typedef struct node
-{
-	tudien data;
-	node *link;
-}node;
+typedef struct tudien { char tu[10]; char nghia[100]; } tudien;
+typedef struct node { tudien data; node *link; } node;
 node bucket[M];
-int hambam(char tu[])
-{
-	char ch;
-	ch=toupper(tu[0]);
-	return ((ch-65)%M);
-}
-void khoitao(node bucket[])
-{
-	int i;
-	for(i=0;i<M;i++)
-	bucket[i].link=NULL;
-}
-void themtu(tudien x)
-{
-	node *p;int i;
-	i=hambam(x.tu);
-	p=new (node);
-	p->data=x;
-	p->link=bucket[i].link;
-	bucket[i].link=p;
-}
-node *timtu(char tu[])
-{
-	int tim=1;
-	int i=hambam(tu);
-	node *p=bucket[i].link;
-	while((tim==1)&&(p!=NULL))
-	{
-		if(strcmp(p->data.tu,tu)==0)
-			tim=0;
-		else
-			p=p->link;
-	}
-	if(tim==0)
-		return p;
-	else
-		return NULL;
-}
-int kiemtra(char tu[])
-{
-	int tim=1;
-	int i=hambam(tu);
-	node *p=bucket[i].link;
-	while((tim==1)&&(p!=NULL))
-	{
-		if(strcmp(p->data.tu,tu)==0)
-			tim=0;
-		else
-			p=p->link;
-	}
-	if(tim==0)
-		return 1;
-	else
-		return 0;
+
+int hambam(char tu[]) { char ch = toupper(tu[0]); return ((ch - 65) % M); }
+void khoitao(node bucket[]) { for (int i = 0; i < M; i++) bucket[i].link = NULL; }
+
+void themtu(tudien x) {
+    node *p; int i = hambam(x.tu);
+    p = new(node); p->data = x; p->link = bucket[i].link; bucket[i].link = p;
 }
 
-
-void khoi_tao()
-{
-		printf("\nCHUONG TRINH TU DIEN \n");
-		printf("\n1.Them mot tu moi");
-		printf("\n2.Tra tu ");
-		printf("\n3.In tu dien ");
-		printf("\n4.Xoa tu ");
-		printf("\n5.Ghi tu dien vao file");
-		printf("\n6.Doc file vao tu dien ");
-		printf("\n7.Thoat");
-		printf("\nChon chuc nang : ");
-}
-void intudien()
-{
-	int i;  node *p;
-	for(i=0;i<M;i++)
-	{
-		p=bucket[i].link;
-		printf("\nDanh muc tu %c :",i+65);
-		while(p!=NULL)
-		{ printf("\n Tu : %s  nghia : %s ",p->data.tu,p->data.nghia);
-		  p=p->link;
-		}
-
-	}
-}
-void xoatu(char tu[])
-{
-	int i;node *p,*q;
-	i=hambam(tu);
-	p=bucket[i].link;
-	while((p!=NULL)&&(strcmp(p->data.tu,tu)!=0))
-	{
-		q=p;
-		p=p->link;
-	 }
-	if(p==NULL)
-		printf("\ntu tren khong co trong tu dien ");
-	else
-		if(p==bucket[i].link)
-		{
-			bucket[i].link=p->link;
-			delete(p);
-		}
-		else
-		{
-			q->link=p->link;
-			delete(p);
-		}
-      }
-void ghifile(char *filename)
-{       FILE *f;
-	int i;  node *p;
-	f=fopen(filename,"wb");
-	for(i=0;i<M;i++)
-	{
-		p=bucket[i].link;
-		while(p!=NULL)
-		{ fwrite(&p->data,sizeof(p->data),1,f);
-		  p=p->link;
-		}
-	}
-	fclose(f);
-}
-void docfile(char *filename)
-{       FILE *f;
-	tudien tam;
-	f=fopen(filename,"rb");
-	while(!feof(f))
-	 {
-	 fread(&tam,sizeof(tam),1,f);
-	 if(kiemtra(tam.tu)==0) themtu(tam);
-
-	}
-	fclose(f);
+node *timtu(char tu[]) {
+    int i = hambam(tu); node *p = bucket[i].link;
+    while (p != NULL) { if (strcmp(p->data.tu, tu) == 0) return p; p = p->link; }
+    return NULL;
 }
 
-int main()
-{
-		int chon;tudien x;char ch[10];node *p;int t;
-docfile((char *)"e:\\tudien.txt");
-       nhan:
-       khoi_tao();
-       scanf("%d",&chon);
-		if(chon==7)
-			{
-			ghifile((char *)"e:\\tudien.txt");
-			exit(1);
-			}
-		switch(chon)
-		{
-			case 1:
-			{
-				printf("\nBan muon them bao nhieu tu ?");
-				scanf("%d",&t);
-				for(int i=0;i<t;i++)
-				{
-					printf("\nNhap tu moi thu %d : ",i+1);
-					fflush(stdin);gets(x.tu);
-					if(kiemtra(x.tu)==1)
-					 printf("\n Tu: %s da co trong tu dien");
-					else
-					{
-					printf("\nNhap nghia cua tu: ");
-					fflush(stdin);gets(x.nghia);
-					themtu(x);
-					}				}
-				printf("\n Nhan phim bat ky de tiep tuc!");
-				getch();
-				break;
-			}
-			case 2:
-			{
-				printf("\nNhap tu can tra ");
-				fflush(stdin);
-				gets(ch);
-				p=timtu(ch);
-				if(p!=NULL)
-					printf("\nTu : %s co nghia la :%s",p->data.tu,p->data.nghia);
-				else
-					printf("tu tren khong co trong tu dien");getch();
-				printf("\n Nhan phim bat ky de tiep tuc!");
-				getch();
-				break;
-
-			}
-			case 3:
-				intudien();
-				printf("\n Nhan phim bat ky de tiep tuc!");
-				getch();
-				break;
-			case 4:
-			{
-				printf("\nNhap tu can xoa : ");
-				fflush(stdin);
-				gets(ch);
-				xoatu(ch);
-				break;
-			}
-			case 5:
-				ghifile((char *)"e:\\tudien.txt");
-				printf("\n Nhan phim bat ky de tiep tuc!");
-				getch();
-				break;
-			case 6:
-				docfile((char *)"e:\\tudien.txt");
-				printf("\n Nhan phim bat ky de tiep tuc!");
-				getch();
-				break;
-
-	 }
-	 goto nhan;
-
-
+void intudien() {
+    for (int i = 0; i < M; i++) {
+        node *p = bucket[i].link;
+        printf("\nDanh muc tu %c:", i + 65);
+        while (p != NULL) { printf("\n Tu: %s  nghia: %s", p->data.tu, p->data.nghia); p = p->link; }
+    }
 }
- 
-Bài 10: Một số ứng dụng thuật toán
-Ứng dụng thuật toán sắp xếp ngoài
-#include"stdio.h"
-#include"conio.h"
-#include"string.h"
-#include"time.h"
-#include"stdlib.h"   
+```
 
-typedef struct
-{
-	char Maso[10];
-	char HoTen[40];
-} SinhVien;
+---
 
-FILE *f0,*f1,*f2;
-int m,n,Eor;
-SinhVien x1,x2,x,y;
+## Bài 10: Ứng dụng giải thuật
 
-int kiemtra(char *FileName,char maso[10])
-{
-	FILE *f;
-	int Found=0; 
-	SinhVien sv;
-	fflush(stdin);
-	f=fopen(FileName,"rb");
-	while (!feof(f) && Found==0)
-	{
-		fread(&sv,sizeof(sv),1,f);
-		if (strcmp(sv.Maso,maso)==0)
-		 Found=1;
-	}
-	fclose(f);
-	return (Found);
-}
+### Ứng dụng sắp xếp ngoài (Quản lý sinh viên từ file)
 
-void WriteFile(char *FileName)
-{
-	FILE *f;
-	int n,i;
-	SinhVien sv;
-	f=fopen(FileName,"ab");
-	printf("Nhap bao nhieu sinh vien? ");
-	scanf("%d",&n);
-	fflush(stdin);
-	for(i=1;i<=n;i++)
-	{ 	
-		printf("Sinh vien thu %i\n",i); 
-		printf("	- MSSV: ");
-		gets(sv.Maso);
-		if(kiemtra(FileName,sv.Maso)==1||strcmp(sv.Maso," ")==0)
-		printf("\nMa so bi trung hoac rong!!!");
-		else
-		{
-		printf("	- Ho ten: ");
-		gets(sv.HoTen); 
-		fwrite(&sv,sizeof(sv),1,f); 
-		fflush(stdin);	
-		} 
-	}
-	fclose(f);
-	printf("\nBam phim bat ky de tiep tuc\n");
-	getch();
-}
+```c
+// Quản lý file SinhVien.Dat với cấu trúc:
+typedef struct { char Maso[10]; char HoTen[40]; } SinhVien;
 
-void ReadFile(char *FileName)
-{
-	FILE *f;
-	 SinhVien sv; 
-	 f=fopen(FileName,"rb");
-	printf("	MSSV	|	Ho va ten\n");
-	fread(&sv,sizeof(sv),1,f);
-	while (!feof(f))
-	{
-		printf("	%s	|	%s\n",sv.Maso,sv.HoTen);
-		fread(&sv,sizeof(sv),1,f);
-	}
-	fclose(f);
-	
-	printf("\nBam phim bat ky de tiep tuc\n");
-	//getch();
-}
+// Các chức năng:
+// WriteFile  — nhập và ghi sinh viên vào file
+// ReadFile   — đọc và hiển thị danh sách
+// Search     — tìm kiếm theo mã số
+// Delete     — xóa sinh viên theo mã số
+// sort       — sắp xếp file theo mã số (trộn tự nhiên)
+```
 
-void Search(char *FileName)
-{
-	char MSSV[10]; 
-	FILE *f;
-	int Found=0; 
-	SinhVien sv;
-	fflush(stdin);
-	printf("Ma so sinh vien can tim: ");
-	gets(MSSV);
-	f=fopen(FileName,"rb");
-	while (!feof(f) && Found==0)
-	{
-		fread(&sv,sizeof(sv),1,f);
-		if (strcmp(sv.Maso,MSSV)==0)
-			 Found=1;
-	}
-	fclose(f);
-	if (Found == 1)
-	printf("Tim thay SV co ma %s. Ho ten la: %s",sv.Maso,sv.HoTen);
-	else
-	printf("Tim khong thay sinh vien co ma %s",MSSV);
-	
-	printf("\nBam phim bat ky de tiep tuc!!!\n");
-	getch();
-}
+### Ứng dụng Stack tính tổ hợp C(n, k)
 
-void Delete(char *FileName)
-{
-	FILE *f1,*f2; 
-	int Found=0; 
-	char MSSV[10];
-	SinhVien sv;
-	fflush(stdin);
-	printf("Ma so sinh vien can xoa:");
-	gets(MSSV);
-	f1=fopen(FileName,"rb"); 
-	f2=fopen("e:\\Tam.Dat","wb");
-	fread(&sv,sizeof(sv),1,f1);
-	while (!feof(f1))
-	{
-		if(strcmp(sv.Maso,MSSV)!=0)
-			fwrite(&sv,sizeof(sv),1,f2);
-		else
-			 Found=1;
-		fread(&sv,sizeof(sv),1,f1);
-	}
-	fclose(f1);  fclose(f2);
-	
-	f1=fopen(FileName,"wb"); 
-	f2=fopen("e:\\Tam.Dat","rb");
-	fread(&sv,sizeof(sv),1,f2);
-	while(!feof(f2))
-	{
-		fwrite(&sv,sizeof(sv),1,f1);
-		fread(&sv,sizeof(sv),1,f2);
-	}
-	fclose(f1);  fclose(f2);
-	remove("e:\\Tam.Dat");
-	/*remove("e:\\Sinhvien.Dat");//xoa file goc
-	rename("e:\\Tam.Dat","d:\\Sinhvien.Dat");// doi ten file Tam thanh file Sinhvien*/
-
-	
-	if(Found==1)
-	
-		printf("\n Da xoa sinh vien ma so %s",MSSV);
-	
-	else
-		printf("\n Khong tim thay ma sinh vien");
-		printf("\n Nhan phim bat ki de tiep tuc");
-			
-}
-// Sap xep tap tin
-void copy(FILE *fi,FILE *fj)
-{
-	fread(&x,sizeof(x),1,fi);
-	fwrite(&x,sizeof(x),1,fj);
-	if(!feof(fi))
-	{
-		fread(&y,sizeof(y),1,fi);
-		if(!feof(fi))
-		{
-			long curpos=ftell(fi)-sizeof(y);
-			fseek(fi,curpos,0);
-		}
-		else
-			Eor=1;	
-	}
-	if(feof(fi))
-	{
-		Eor=1;
-	}
-	else
-	{
-		if(atoi(x.Maso)>atoi(y.Maso))
-		{
-			Eor=1;
-		}
-		else
-		{
-			Eor=0;
-		}
-	}
-}
-void copyRun(FILE *fi,FILE *fj)
-{
-	do
-	{
-		copy(fi,fj);
-	}
-	while(!Eor);
- 	
-}
-void phanbo()
-{
-	do
-	{
-		copyRun(f0,f1);
-		if(!feof(f0))
-			copyRun(f0,f2);
-	}
-	while(!feof(f0));
-	fclose(f0);
-	fclose(f1);
-	fclose(f2);
-	
-}
-void tronRun()
-{
-	do
-	{
-		fread(&x1,sizeof(x1),1,f1);
-		long curpos=ftell(f1)-sizeof(x1);
-		fseek(f1,curpos,0);
-		fread(&x2,sizeof(x2),1,f2);
-		curpos=ftell(f2)-sizeof(x2);
-		fseek(f2,curpos,0);
-		if(atoi(x1.Maso)<=atoi(x2.Maso))
-		{
-			copy(f1,f0);
-			if(Eor)
-				copyRun(f2,f0);
-		}
-		else
-		{
-			copy(f2,f0);
-			if(Eor)
-				copyRun(f1,f0);
-		}
-	}
-	while(!Eor);
-}
-void tron()
-{
-	while((!feof(f1)) && (!feof(f2)))
-	{
-		tronRun();
-		m++;
-	}
-	while(!feof(f1))
-	{
-		copyRun(f1,f0);
-		m++;
-	}
-	while(!feof(f2))
-	{
-		copyRun(f2,f0);
-		m++;
-	}
-	fclose(f0);
-	fclose(f1);
-	fclose(f2);
-}
-void sort(char *FileName)
-{
-	
-	
-		f0=fopen("e:\\SinhVien.Dat","rb");
-		f1=fopen("e:\\SinhVien1.Dat","wb");
-		copyRun(f0,f1);
-		if(feof(f0))
-		{
-			printf("\n Danh sach da co thu tu");
-			fclose(f0);
-			fclose(f1);
-		}
-		else
-		{
-			do
-			{
-				f0=fopen("e:\\SinhVien.Dat","rb");
-				f1=fopen("e:\\SinhVien1.Dat","wb");
-				f2=fopen("e:\\SinhVien2.Dat","wb");
-				phanbo();
-				f0=fopen("e:\\SinhVien.Dat","wb");
-				f1=fopen("e:\\SinhVien1.Dat","rb");
-				f2=fopen("e:\\SinhVien2.Dat","rb");
-				m=0;
-				tron();
-			}
-			while(m!=1);
-			printf("\n Da sap xep xong danh sach");
-			remove("e:\\SinhVien1.Dat");
-			remove("e:\\SinhVien2.Dat");	
-		}
-	printf("\nBam phim bat ky de tiep tuc!!!\n");	
-}
-int main()
-{
-	int c;
-	for (;;)
-	{
-		printf("1. Nhap DSSV\n"); 
-		printf("2. In DSSV\n"); 
-		printf("3. Tim kiem\n");
-		printf("4. Xoa sinh vien\n");
-		printf("5. Sap Xep\n");
-		printf("6. Thoat\n");
-		printf("Ban chon 1, 2, 3, 4, 5, 6:"); 
-		scanf("%d",&c);
-		if(c==1)
-			WriteFile((char*)"e:\\SinhVien.Dat");
-		else
-			if (c==2)
-				ReadFile((char*)"e:\\SinhVien.Dat");
-		else 
-			if (c==3) 
-				Search((char*)"e:\\SinhVien.Dat");
-		else 
-			if(c==4)
-				Delete((char*)"e:\\SinhVien.Dat");
-		else
-			if(c==5)
-				sort((char*)"e:\\SinhVien.Dat");
-		else
-			break;
-	}
-	
-	return 0;
-}
-
-Ứng dụng ngăn xếp để tính tổ hợp
+```cpp
 #include <stdio.h>
 #include <conio.h>
-typedef struct Trangthai
-{
-	int n;
-	int k;
-}Trangthai;
-typedef struct node
-{
-	Trangthai data;
-	node *link;
-}node;
-typedef struct stack
-{
-	node *top;
-}stack;
-void Init(stack &s)
-{
-	s.top=NULL;
-}
-int Empty(stack s)
-{
-	return s.top==NULL?1:0;
-}
-void Push(stack &s,Trangthai x)
-{
-	node *p;
-	p=new(node);
-	p->data=x;
-	p->link=s.top;
-	s.top=p;
-}
-Trangthai Pop(stack &s)
-{
-	node *p;
-	if(!Empty(s))
-		p=s.top;
-		s.top=p->link;
-	return p->data;
-}
-long Combo(int n,int k)
-{		
-		stack st; long TH=0;
-		Trangthai tt, tt1,tt2; 
-		Init(st);
-		tt={n,k};
-		Push(st,tt);
-		while (!Empty(st))
-		{
-		tt=Pop(st);
-		if(tt.k==0 || tt.n==tt.k)	
-			TH = TH + 1;
-		if(tt.k>0 && tt.n>tt.k)	
-			{
-			printf("A");	
-			tt1={tt.n-1,tt.k-1};
-			Push(st,tt1);
-			tt2={tt.n-1,tt.k};
-			Push(st,tt2);
-			}
-		}
-	return TH;
-}
-int main()
-{
-int n, k;
-printf("\n Nhap vao n:");	scanf("%d",&n);
-printf("\n Nhap vao k:"); 	scanf("%d",&k);
-printf("\n Ket qua:%d",Combo(n,k));
-getch();
+
+typedef struct Trangthai { int n; int k; } Trangthai;
+typedef struct node { Trangthai data; node *link; } node;
+typedef struct stack { node *top; } stack;
+
+void Init(stack &s) { s.top = NULL; }
+int Empty(stack s) { return s.top == NULL ? 1 : 0; }
+
+void Push(stack &s, Trangthai x) {
+    node *p = new(node); p->data = x; p->link = s.top; s.top = p;
 }
 
-Ứng dụng hàng đợi để duyệt danh sách
-#include<stdio.h>
-#include<conio.h>
-#include <string.h>
-# define N 20
-typedef struct sinhvien
-{
-char Ma[10];
-char Hoten[40];
-char Phai[3];
-} Sinhvien;
-typedef struct node
-{
- sinhvien data;
- node *link;
-}node;
-typedef struct queu
-{
- node *front;
- node *rear;
-}queu;
-
-void khoitao(queu &q)
-{
- q.front=q.rear=NULL;
-}
-int empty(queu q)
-{
- if(q.front==NULL)
- return 1;
- else
- return 0;
-}
-void enqueu(queu &q, sinhvien x)
-{ node * new_ele;
- new_ele=new(node);
- new_ele->data=x;
- new_ele->link=NULL;
- 
- if(q.front==NULL)
- {
-  q.front=new_ele;
-  q.rear=q.front;
- }
-  else
-  {
-   q.rear->link=new_ele;
-   q.rear=new_ele;
-  }
- }
-sinhvien dequeu(queu &q)
-{
- node *p;sinhvien x;
- if(!empty(q))
- {
-  p=q.front;
-  x=p->data;
-  q.front=p->link;
-  delete(p);
-  }
- return x;
-}
-void WriteFile(char *FileName)
-{
-FILE *f; int n,i; Sinhvien sv;
-f=fopen(FileName,"wb");
-printf("\nNhap bao nhieu sinh vien? ");
-scanf("%d",&n);
-fflush(stdin);
-for(i=1;i<=n;i++)
-{
-printf("Sinh vien thu %i\n",i);
-printf("	- MSSV: ");
-gets(sv.Ma);
-printf("	- Ho ten: ");
-gets(sv.Hoten);
-printf("	- Phai: ");
-gets(sv.Phai);
-fwrite(&sv,sizeof(sv),1,f);
-fflush(stdin);
-}
-fclose(f);
-printf("\nBam phim bat ky de tiep tuc");
-getch();
-}
-void ReadFile(char *FileName)
-{
-FILE *f; Sinhvien sv; f=fopen(FileName,"rb");
-printf("	MSSV	|	Ho va ten   | Phai \n");
-fread(&sv,sizeof(sv),1,f);
-while (!feof(f))
-{
-printf("	%s	|	%s    |   %s\n",sv.Ma,sv.Hoten, sv.Phai);
-fread(&sv,sizeof(sv),1,f);
-}
-fclose(f);
-printf("\nBam phim bat ky de tiep tuc!!!");
-getch();
-}
-int main()
-{
- int n; sinhvien x; queu q1, q2;
- printf("\nTao tap tin sinh vien!");
- WriteFile((char *)"e:\\sinhvien.dat");
- 
- FILE *f0,*f1,*f2;
- khoitao(q1); khoitao(q2);
- f0=fopen("e:\\sinhvien.dat","rb");
- fread(&x,sizeof(x),1,f0);
-while (!feof(f0))
-{
-if(strcmp(x.Phai,"nu")==0)
-	enqueu(q1,x);
-else
-	enqueu(q2,x);
-fread(&x,sizeof(x),1,f0);
-}
-fclose(f0);
-f1=fopen("e:\\sinhviennu.dat","wb");
-while (!empty(q1))
-	{
-		x=dequeu(q1);
-		fwrite(&x,sizeof(x),1,f1);
-	}
-fclose(f1);
-
-f2=fopen("e:\\sinhviennam.dat","wb");
-while (!empty(q2))
-	{
-		x=dequeu(q2);
-		fwrite(&x,sizeof(x),1,f2);
-	}
-fclose(f2);
-printf("\nDanh sach sinh vien da nhap:");
-ReadFile((char *)"e:\\sinhvien.dat");
-
-printf("\nDanh sach sinh vien nu:");
-ReadFile((char *)"e:\\sinhviennu.dat");
-
-printf("\nDanh sach sinh vien nam:");
-ReadFile((char *)"e:\\sinhviennam.dat");
-
+Trangthai Pop(stack &s) {
+    node *p;
+    if (!Empty(s)) p = s.top;
+    s.top = p->link;
+    return p->data;
 }
 
+long Combo(int n, int k) {
+    stack st; long TH = 0;
+    Trangthai tt, tt1, tt2;
+    Init(st); tt = {n, k}; Push(st, tt);
+    while (!Empty(st)) {
+        tt = Pop(st);
+        if (tt.k == 0 || tt.n == tt.k) TH++;
+        if (tt.k > 0 && tt.n > tt.k) {
+            tt1 = {tt.n - 1, tt.k - 1}; Push(st, tt1);
+            tt2 = {tt.n - 1, tt.k};     Push(st, tt2);
+        }
+    }
+    return TH;
+}
+
+int main() {
+    int n, k;
+    printf("\n Nhap vao n:"); scanf("%d", &n);
+    printf("\n Nhap vao k:"); scanf("%d", &k);
+    printf("\n Ket qua:%ld", Combo(n, k));
+    getch();
+}
+```
+
+### Ứng dụng Queue phân loại sinh viên theo giới tính
+
+```cpp
+// Đọc file sinhvien.dat, phân vào 2 queue theo trường Phai ("nu" / khác)
+// Ghi kết quả ra:
+//   sinhviennu.dat  — sinh viên nữ
+//   sinhviennam.dat — sinh viên nam
+```
+
+---
+
+## Ghi chú
+
+- Compiler: **Turbo C++ / Dev-C++** (cần `conio.h`, `getch()`)
+- Đường dẫn file (`D:\`, `E:\`) cần chỉnh lại cho phù hợp máy thực tế
+- Hàm `gets()` và `fflush(stdin)` là phong cách C cũ, có thể thay bằng `fgets()` cho an toàn hơn
