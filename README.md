@@ -1,5 +1,5 @@
 # Cấu trúc Dữ liệu và Giải thuật — Tài liệu Thực hành (C/C++)
-
+(Code được tổng hợp từ các bài của giáo viên trên lớp)
 ---
 
 ## Bài số 1: Tìm kiếm, Sắp xếp
